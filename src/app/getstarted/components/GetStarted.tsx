@@ -1,5 +1,6 @@
 'use client';
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 const buttonClass =
   "bg-yellow-600 hover:bg-yellow-700 text-white font-semibold py-2 px-6 rounded-xl shadow transition flex items-center gap-2 disabled:bg-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed";
@@ -13,6 +14,43 @@ const GetStarted = () => {
     location: "",
     dob: "",
   });
+  const [user, setUser] = useState<any>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    // Ambil user dari localStorage
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      setUser(JSON.parse(userData));
+    } else {
+      router.replace("/login/applicant");
+    }
+  }, [router]);
+
+  useEffect(() => {
+    // Prefill form jika user sudah punya data
+    if (user && step === 2) {
+      setForm(f => ({
+        ...f,
+        name: user.name || "",
+        // Bisa tambahkan prefill location/dob jika ada di user
+      }));
+    }
+  }, [user, step]);
+
+  function handleComplete() {
+    // Set flag onboarding
+    localStorage.setItem("onboarded", "true");
+    // Redirect ke dashboard sesuai role
+    const role = user?.role || "USER";
+    if (role === "USER") {
+      router.replace("/dashboard/applicant");
+    } else if (role === "ARTISAN") {
+      router.replace("/dashboard/artisan");
+    } else {
+      router.replace("/dashboard");
+    }
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center">
@@ -99,7 +137,9 @@ const GetStarted = () => {
             <p className="mb-8 text-gray-700">
               Thank you, <b>{form.name}</b>! Your profile is ready. You can now explore maestro opportunities and join the cultural heritage journey.
             </p>
-            {/* Tambahkan tombol lanjut ke dashboard atau halaman lain */}
+            <button className={buttonClass} onClick={handleComplete}>
+              Go to Dashboard
+            </button>
           </div>
         )}
       </div>
