@@ -1,10 +1,10 @@
-import LogoutButton from '@/app/components/LogoutButton';
 import { getCurrentUser } from '@/lib/auth';
+import LogoutButton from '@/lib/components/LogoutButton';
 import ActiveLink from './ActiveLink';
 
 const Sidebar = async () => {
   const user = await getCurrentUser();
-  
+
   if (!user) {
     return null;
   }
@@ -14,26 +14,16 @@ const Sidebar = async () => {
       <div>
         <h2 className="text-xl font-bold mb-4">Applicant Dashboard</h2>
         <nav className="flex flex-col gap-2">
-          <ActiveLink 
-            href="/dashboard/applicant" 
+          <ActiveLink
+            href="/dashboard/applicant"
             exactMatch={true}
           >
             Overview
           </ActiveLink>
-          <ActiveLink 
-            href="/dashboard/applicant/applications"
-          >
-            My Applications
-          </ActiveLink>
-          <ActiveLink 
+          <ActiveLink
             href="/dashboard/applicant/profile"
           >
             Edit Profile
-          </ActiveLink>
-          <ActiveLink 
-            href="/programs"
-          >
-            Browse Programs
           </ActiveLink>
         </nav>
       </div>

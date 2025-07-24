@@ -1,5 +1,5 @@
-import LogoutButton from '@/app/components/LogoutButton';
 import { getCurrentUser } from '@/lib/auth';
+import LogoutButton from '@/lib/components/LogoutButton';
 import Link from 'next/link';
 import ActiveLink from './ActiveLink';
 
@@ -11,7 +11,7 @@ const Sidebar = async () => {
   }
 
   return (
-    <aside className="w-full md:w-64 bg-white h-full border-r px-6 py-8 flex flex-col gap-6">
+    <aside className="w-full md:w-64  min-h-screen border-r px-6 py-8 flex flex-col gap-6">
       <div>
         <h2 className="text-xl font-bold mb-4">
           {user.role === 'ARTISAN' ? 'Artisan Dashboard' : 'Candidate Dashboard'}

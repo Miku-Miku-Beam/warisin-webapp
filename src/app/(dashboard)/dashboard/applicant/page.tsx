@@ -22,9 +22,6 @@ export default async function ApplicantDashboardPage() {
   const totalApplied = applications.length;
 
   return (
-    <div className="flex min-h-screen">
-      <Sidebar />
-      <MainContent totalApplied={totalApplied} applications={applications} user={user} />
-    </div>
+    <MainContent totalApplied={totalApplied} applications={applications} user={user} />
   );
 }
