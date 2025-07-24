@@ -1,20 +1,6 @@
 import EventCard from './EventCard';
 
-const events = [
-  {
-    title: "EMPU SURYONO",
-    organizer: "GPadaka Corp",
-    description: "Workshop Web3 bersama mentor ternama",
-    date: "Jul 11, 2025",
-    location: "Basement Gd. 5, Universitas Amikom Yogyakarta",
-    attendance: 1,
-    capacity: 50,
-    ended: true,
-  },
-  // Tambahkan event lain di sini jika perlu
-];
-
-const EventList = () => (
+const EventList = ({ events }) => (
   <div className="flex flex-col gap-8">
     <div className="flex items-center gap-4 mb-6 bg-white/60 backdrop-blur-md border border-white/30 shadow-lg rounded-2xl p-4">
       <input
@@ -27,10 +13,15 @@ const EventList = () => (
         {/* Tambahkan filter lain jika perlu */}
       </select>
     </div>
+    
     <div className="flex flex-wrap gap-8">
-      {events.map((event, idx) => (
-        <EventCard key={idx} {...event} />
-      ))}
+      {events && events.length > 0 ? (
+        events.map((event) => (
+          <EventCard key={event.id} {...event} />
+        ))
+      ) : (
+        <div className="text-gray-500">No events found.</div>
+      )}
     </div>
   </div>
 );
