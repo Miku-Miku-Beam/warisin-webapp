@@ -1,4 +1,5 @@
 import { PrismaClient } from '../generated';
+import { adminAuth } from '../src/lib/firebase/admin';
 
 // Define Role enum locally to match schema
 enum Role {
@@ -8,8 +9,51 @@ enum Role {
 
 const prisma = new PrismaClient();
 
+// Helper function to create Firebase user
+async function createFirebaseUser(email: string, password: string, displayName: string): Promise<string> {
+    try {
+        const userRecord = await adminAuth.createUser({
+            email: email,
+            password: password,
+            displayName: displayName,
+            emailVerified: true,
+        });
+        console.log(`🔥 Created Firebase user: ${email} (UID: ${userRecord.uid})`);
+        return userRecord.uid;
+    } catch (error: any) {
+        if (error.code === 'auth/email-already-exists') {
+            // If user already exists, get the UID
+            const existingUser = await adminAuth.getUserByEmail(email);
+            console.log(`🔥 Firebase user already exists: ${email} (UID: ${existingUser.uid})`);
+            return existingUser.uid;
+        }
+        console.error(`❌ Error creating Firebase user ${email}:`, error);
+        throw error;
+    }
+}
+
+// Safe Firebase user creation with fallback
+async function safeCreateFirebaseUser(email: string, password: string, displayName: string, fallbackAuthId: string): Promise<string> {
+    try {
+        return await createFirebaseUser(email, password, displayName);
+    } catch (error) {
+        console.log(`⚠️  Using fallback authId for ${email}: ${fallbackAuthId}`);
+        return fallbackAuthId;
+    }
+}
+
 async function main() {
     console.log('🌱 Starting seeding...');
+    console.log('🔥 Connecting to Firebase Admin...');
+
+    try {
+        // Test Firebase connection
+        await adminAuth.listUsers(1);
+        console.log('✅ Firebase Admin connection successful');
+    } catch (error) {
+        console.error('❌ Firebase Admin connection failed:', error);
+        console.log('⚠️  Continuing with seeding (Firebase users will not be created)');
+    }
 
     // Clean existing data (in reverse order of dependencies)
     await prisma.application.deleteMany();
@@ -41,6 +85,14 @@ async function main() {
     const createdCategories = await prisma.herittageCategory.findMany();
 
     // Create Users (Artisans)
+    // Create real Firebase user for one artisan
+    const firebaseArtisanUid = await safeCreateFirebaseUser(
+        'pak.bambang@gmail.com',
+        'password123',
+        'Pak Bambang Sutrisno',
+        'firebase_artisan_bambang_001'
+    );
+
     const artisan1 = await prisma.user.create({
         data: {
             email: 'pak.bambang@gmail.com',
@@ -49,7 +101,7 @@ async function main() {
             bio: 'Master craftsman with 30+ years experience in traditional batik making from Yogyakarta',
             profileImageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150',
             location: 'Yogyakarta',
-            authId: 'firebase_artisan_bambang_001',
+            authId: firebaseArtisanUid, // Use real Firebase UID
         },
     });
 
@@ -92,6 +144,14 @@ async function main() {
     console.log('👨‍🎨 Created artisan users');
 
     // Create Users (Applicants)
+    // Create real Firebase user for one applicant
+    const firebaseApplicantUid = await safeCreateFirebaseUser(
+        'andi.pratama@gmail.com',
+        'password123',
+        'Andi Pratama',
+        'firebase_applicant_andi_001'
+    );
+
     const applicant1 = await prisma.user.create({
         data: {
             email: 'andi.pratama@gmail.com',
@@ -100,7 +160,7 @@ async function main() {
             bio: 'Art student passionate about preserving Indonesian heritage',
             profileImageUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150',
             location: 'Jakarta',
-            authId: 'firebase_applicant_andi_001',
+            authId: firebaseApplicantUid, // Use real Firebase UID
         },
     });
 
@@ -259,6 +319,9 @@ async function main() {
             categoryId: batikCategory!.id,
             artisanId: artisan1.id,
             isOpen: true,
+            startDate: new Date('2024-01-15T00:00:00Z'),
+            endDate: new Date('2024-04-15T00:00:00Z'),
+            location: 'Taman Sari, Yogyakarta',
         },
     });
 
@@ -271,6 +334,9 @@ async function main() {
             categoryId: ceramicCategory!.id,
             artisanId: artisan2.id,
             isOpen: true,
+            startDate: new Date('2024-01-15T00:00:00Z'),
+            endDate: new Date('2024-04-15T00:00:00Z'),
+            location: 'Taman Sari, Yogyakarta',
         },
     });
 
@@ -283,6 +349,9 @@ async function main() {
             categoryId: carvingCategory!.id,
             artisanId: artisan3.id,
             isOpen: true,
+            startDate: new Date('2024-01-15T00:00:00Z'),
+            endDate: new Date('2024-04-15T00:00:00Z'),
+            location: 'Taman Sari, Yogyakarta',
         },
     });
 
@@ -295,6 +364,9 @@ async function main() {
             categoryId: tenunCategory!.id,
             artisanId: artisan4.id,
             isOpen: true,
+            startDate: new Date('2024-01-15T00:00:00Z'),
+            endDate: new Date('2024-04-15T00:00:00Z'),
+            location: 'Taman Sari, Yogyakarta',
         },
     });
 
@@ -307,6 +379,9 @@ async function main() {
             categoryId: batikCategory!.id,
             artisanId: artisan1.id,
             isOpen: false,
+            startDate: new Date('2024-01-15T00:00:00Z'),
+            endDate: new Date('2024-04-15T00:00:00Z'),
+            location: 'Taman Sari, Yogyakarta',
         },
     });
 
@@ -397,6 +472,21 @@ async function main() {
 - Applications: ${applicationCount}
 - Artisan Profiles: ${await prisma.artisanProfile.count()}
 - APPLICANT Profiles: ${await prisma.applicantProfile.count()}
+
+🔑 Test Credentials (Firebase Users):
+┌─────────────────────────────────────────────────────────────┐
+│ ARTISAN Account:                                            │
+│ Email: pak.bambang@gmail.com                                │
+│ Password: password123                                       │
+│ Role: ARTISAN                                               │
+│                                                             │
+│ APPLICANT Account:                                          │
+│ Email: andi.pratama@gmail.com                               │
+│ Password: password123                                       │
+│ Role: APPLICANT                                             │
+└─────────────────────────────────────────────────────────────┘
+
+✅ You can now login with these credentials to test the application!
   `);
 }
 

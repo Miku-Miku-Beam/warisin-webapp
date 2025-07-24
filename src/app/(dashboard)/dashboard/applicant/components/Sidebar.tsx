@@ -1,6 +1,5 @@
 import LogoutButton from '@/app/components/LogoutButton';
 import { getCurrentUser } from '@/lib/auth';
-import Link from 'next/link';
 import ActiveLink from './ActiveLink';
 
 const Sidebar = async () => {

@@ -63,12 +63,15 @@ model Program {
   isOpen       Boolean           @default(true)
   description  String
   duration     String
+  location     String
   criteria     String
   categoryId   String
   artisanId    String
   programImageUrl String?
   videoUrl     String?
   videoThumbnailUrl String?
+  startDate    DateTime
+  endDate      DateTime
 
   createdAt    DateTime          @default(now())
   updatedAt    DateTime          @updatedAt
