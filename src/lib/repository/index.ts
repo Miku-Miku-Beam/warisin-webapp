@@ -3,6 +3,7 @@ export { applicantRepository } from './applicant.repository';
 export { applicationRepository } from './application.repository';
 export { artisanRepository } from './artisan.repository';
 export { categoryRepository } from './category.repository';
+export { programsRepository } from './program.repository';
 export { userRepository } from './user.repository';
 
 // Interface exports
@@ -13,16 +14,15 @@ export type {
 } from './applicant.repository';
 
 export type {
-    ApplicationWithApplicant,
     ApplicationWithProgram,
     ArtisanDashboard,
-    ArtisanPerformance, ArtisanProfileDetails,
-    // Type definitions for better auto-completion
-    ArtisanUser, IArtisanProgramData,
+    ArtisanPerformance,
+    ArtisanProfileDetails,
     IArtisanRepository,
     ICreateArtisanProfileData,
     IUpdateArtisanProfileData,
-    IUpdateProgramData, ProgramPerformanceMetric, ProgramWithApplications, ProgramWithDetails
+    ProgramPerformanceMetric,
+    ProgramWithApplications
 } from './artisan.repository';
 
 export type {
@@ -37,10 +37,21 @@ export type {
 } from './category.repository';
 
 export type {
-    IApplicationRepository,
+    ApplicantApplicationStats, ApplicantProfile as ApplicationApplicantProfile,
+    ApplicantUser as ApplicationApplicantUser, ArtisanUser as ApplicationArtisanUser,
+    Category as ApplicationCategory, ProgramWithDetails as ApplicationProgramWithDetails,
+    ApplicationStats, ApplicationWithDetails, ArtisanApplicationStats, IApplicationRepository,
     ICreateApplicationData,
-    IUpdateApplicationData
+    IUpdateApplicationData, ProgramApplicationStats
 } from './application.repository';
+
+export type {
+    ApplicantProfile, ApplicantUser, ApplicationWithApplicant, ArtisanProfile, ArtisanStats, ArtisanUser, Category, ICreateProgramData,
+    IProgramsRepository,
+    IUpdateProgramData as ProgramUpdateData,
+    ProgramWithDetails,
+    ProgramWithStats, RecentApplication
+} from './program.repository';
 
 // Utility exports
 export { applicantUtils } from './applicant.repository';
@@ -60,6 +71,7 @@ import { applicantRepository, applicantUtils } from './applicant.repository';
 import { applicationRepository, applicationUtils } from './application.repository';
 import { artisanRepository, artisanUtils } from './artisan.repository';
 import { categoryRepository, categoryUtils } from './category.repository';
+import { artisanUtils as programArtisanUtils, programsRepository } from './program.repository';
 import { userRepository, userUtils } from './user.repository';
 
 // Combined repository for easier imports
@@ -68,7 +80,8 @@ export const repositories = {
     artisan: artisanRepository,
     user: userRepository,
     category: categoryRepository,
-    application: applicationRepository
+    application: applicationRepository,
+    program: programsRepository // Assuming program-related functions are in application repository
 };
 
 export const utils = {
@@ -76,5 +89,6 @@ export const utils = {
     artisan: artisanUtils,
     user: userUtils,
     category: categoryUtils,
-    application: applicationUtils
+    application: applicationUtils,
+    programArtisan: programArtisanUtils
 };
