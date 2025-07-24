@@ -19,7 +19,7 @@ export default function Home() {
           'Authorization': `Bearer ${userCredential.user.uid}`
         },
         body: JSON.stringify({
-          role: 'ARTISAN'
+          role: 'USER'
         })
       });
 
