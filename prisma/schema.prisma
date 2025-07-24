@@ -15,7 +15,7 @@ datasource db {
 }
 
 enum Role {
-  APPLICANT
+  APLICANT
   ARTISAN
   ADMIN
 }
@@ -24,12 +24,44 @@ model User {
   id              String  @id @default(cuid())
   email           String  @unique
   name            String?
-  role            Role    @default(APPLICANT)
+  role            Role    @default(APLICANT)
   bio             String?
   profileImageUrl String?
   location        String?
 
   authId String @unique
+
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  ArtisanProfile  ArtisanProfile?
+  AplicantProfile AplicantProfile?
+}
+
+model AplicantProfile {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
+  background String @db.Text
+  interests  String @db.Text
+
+  portfolioUrl String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ArtisanProfile {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
+  story      String  @db.Text
+  expertise  String 
+  location   String? 
+  imageUrl   String?
+
+  works String[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
