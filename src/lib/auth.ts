@@ -5,7 +5,7 @@ export async function getCurrentUser() {
     try {
         const cookieStore = await cookies();
         const sessionCookie = cookieStore.get('session');
-        
+
         if (!sessionCookie) {
             return null;
         }
@@ -36,6 +36,22 @@ export async function getCurrentUser() {
         return user;
     } catch (error) {
         console.error('Error getting current user:', error);
+        return null;
+    }
+}
+
+export const getCurrentCookie = async () => {
+    const cookieStore = await cookies();
+    const sessionCookie = cookieStore.get('session');
+
+    if (!sessionCookie) {
+        return null;
+    }
+
+    try {
+        return JSON.parse(sessionCookie.value);
+    } catch (error) {
+        console.error('Error parsing session cookie:', error);
         return null;
     }
 }

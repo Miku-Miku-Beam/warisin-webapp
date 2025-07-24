@@ -78,7 +78,6 @@ model Program {
 
   // galery
   galleryUrls       String[] @default([])
-  galleryThumbnails String[] @default([])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
