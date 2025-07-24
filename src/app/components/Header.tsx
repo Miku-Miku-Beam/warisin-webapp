@@ -6,7 +6,7 @@ const Header = async () => {
   const user = await getCurrentUser();
   const isLoggedIn = !!user;
   const isArtisan = user?.role === 'ARTISAN';
-  const isApplicant = user?.role === 'Applicant';
+  const isApplicant = user?.role === 'APPLICANT';
 
   return (
     <header className="sticky top-0 z-30 bg-white/90 backdrop-blur border-b border-yellow-100 shadow-sm">

@@ -1,4 +1,4 @@
 export const ROLE = {
     ARTISAN: 'ARTISAN',
-    APPLICANT: 'Applicant',
+    APPLICANT: 'APPLICANT',
 }

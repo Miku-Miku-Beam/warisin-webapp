@@ -82,16 +82,16 @@ export async function POST(request: NextRequest) {
             }
 
         // Validate role for new user
-        if (role && !['Applicant', 'ARTISAN'].includes(role)) {
+        if (role && !['APPLICANT', 'ARTISAN'].includes(role)) {
             console.error('Invalid role provided:', role)
-            return Response.json({ error: 'Invalid role. Must be Applicant or ARTISAN' }, { status: 400 })
+            return Response.json({ error: 'Invalid role. Must be APPLICANT or ARTISAN' }, { status: 400 })
         }            // Create a new user
             const userData = {
                 email: email || '',
                 name: name || tokenName || '',
                 profileImageUrl: picture || '',
                 authId: uid,
-                role: role || 'Applicant',
+                role: role || 'APPLICANT',
             };
 
             console.log('Creating new user with data:', { ...userData, authId: '[HIDDEN]' })

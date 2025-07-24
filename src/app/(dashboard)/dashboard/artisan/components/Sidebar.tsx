@@ -10,31 +10,35 @@ const Sidebar = async () => {
     return null;
   }
 
+  console.log("ROLEEE",user)
+
   return (
     <aside className="w-full md:w-64 bg-white h-full border-r px-6 py-8 flex flex-col gap-6">
       <div>
-        <h2 className="text-xl font-bold mb-4">Applicant Dashboard</h2>
+        <h2 className="text-xl font-bold mb-4">
+          {user.role === 'ARTISAN' ? 'Artisan Dashboard' : 'Candidate Dashboard'}
+        </h2>
         <nav className="flex flex-col gap-2">
           <ActiveLink 
-            href="/dashboard/applicant" 
+            href="/dashboard/artisan" 
             exactMatch={true}
           >
             Overview
           </ActiveLink>
           <ActiveLink 
-            href="/dashboard/applicant/applications"
+            href="/dashboard/artisan/programs"
           >
-            My Applications
+            My Programs
           </ActiveLink>
           <ActiveLink 
-            href="/dashboard/applicant/profile"
+            href="/dashboard/artisan/applications"
+          >
+            Applications
+          </ActiveLink>
+          <ActiveLink 
+            href="/dashboard/artisan/profile"
           >
             Edit Profile
-          </ActiveLink>
-          <ActiveLink 
-            href="/programs"
-          >
-            Browse Programs
           </ActiveLink>
         </nav>
       </div>

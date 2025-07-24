@@ -2,7 +2,7 @@ import { PrismaClient } from '../generated';
 
 // Define Role enum locally to match schema
 enum Role {
-    APPLICANT = 'Applicant',
+    APPLICANT = 'APPLICANT',
     ARTISAN = 'ARTISAN'
 }
 
@@ -96,7 +96,7 @@ async function main() {
         data: {
             email: 'andi.pratama@gmail.com',
             name: 'Andi Pratama',
-            role: Role.APPLICANT,
+            role: 'APPLICANT',
             bio: 'Art student passionate about preserving Indonesian heritage',
             profileImageUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150',
             location: 'Jakarta',
@@ -108,7 +108,7 @@ async function main() {
         data: {
             email: 'sari.dewi@gmail.com',
             name: 'Sari Dewi',
-            role: Role.APPLICANT,
+            role: 'APPLICANT',
             bio: 'Designer interested in traditional crafts and modern applications',
             profileImageUrl: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150',
             location: 'Bandung',
@@ -120,7 +120,7 @@ async function main() {
         data: {
             email: 'budi.setiawan@gmail.com',
             name: 'Budi Setiawan',
-            role: Role.APPLICANT,
+            role: 'APPLICANT',
             bio: 'Cultural enthusiast and amateur photographer',
             profileImageUrl: 'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?w=150',
             location: 'Surabaya',
@@ -132,7 +132,7 @@ async function main() {
         data: {
             email: 'maya.sari@gmail.com',
             name: 'Maya Sari',
-            role: Role.APPLICANT,
+            role: 'APPLICANT',
             bio: 'University student studying Cultural Heritage and Arts',
             profileImageUrl: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150',
             location: 'Yogyakarta',
@@ -391,7 +391,7 @@ async function main() {
 
     console.log(`
 📊 Summary:
-- Users: ${userCount} (${await prisma.user.count({ where: { role: 'ARTISAN' } })} artisans, ${await prisma.user.count({ where: { role: Role.APPLICANT } })} APPLICANTs)
+- Users: ${userCount} (${await prisma.user.count({ where: { role: 'ARTISAN' } })} artisans, ${await prisma.user.count({ where: { role: 'APPLICANT' } })} APPLICANTs)
 - Heritage Categories: ${categoryCount}
 - Programs: ${programCount} (${await prisma.program.count({ where: { isOpen: true } })} open, ${await prisma.program.count({ where: { isOpen: false } })} closed)
 - Applications: ${applicationCount}

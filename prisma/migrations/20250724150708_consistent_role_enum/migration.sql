@@ -1,12 +1,12 @@
 -- CreateEnum
-CREATE TYPE "Role" AS ENUM ('Applicant', 'ARTISAN');
+CREATE TYPE "Role" AS ENUM ('APPLICANT', 'ARTISAN');
 
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "name" TEXT,
-    "role" "Role" NOT NULL DEFAULT 'Applicant',
+    "role" "Role" NOT NULL DEFAULT 'APPLICANT',
     "bio" TEXT,
     "profileImageUrl" TEXT,
     "location" TEXT,
@@ -65,6 +65,9 @@ CREATE TABLE "Program" (
     "criteria" TEXT NOT NULL,
     "categoryId" TEXT NOT NULL,
     "artisanId" TEXT NOT NULL,
+    "programImageUrl" TEXT,
+    "videoUrl" TEXT,
+    "videoThumbnailUrl" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -108,10 +111,10 @@ ALTER TABLE "ApplicantProfile" ADD CONSTRAINT "ApplicantProfile_userId_fkey" FOR
 ALTER TABLE "ArtisanProfile" ADD CONSTRAINT "ArtisanProfile_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Program" ADD CONSTRAINT "Program_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "HerittageCategory"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Program" ADD CONSTRAINT "Program_artisanId_fkey" FOREIGN KEY ("artisanId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Program" ADD CONSTRAINT "Program_artisanId_fkey" FOREIGN KEY ("artisanId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Program" ADD CONSTRAINT "Program_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "HerittageCategory"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Application" ADD CONSTRAINT "Application_ProgramId_fkey" FOREIGN KEY ("ProgramId") REFERENCES "Program"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
