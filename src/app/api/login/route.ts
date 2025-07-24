@@ -33,7 +33,10 @@ export async function POST(request: NextRequest) {
 
         if (existingUser) {
             // User exists, just return user data
-            (await cookies()).set('session', existingUser.id, {
+            (await cookies()).set('session', JSON.stringify({
+                userId: existingUser.id,
+                role: existingUser.role,
+            }), {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
                 sameSite: 'strict',
