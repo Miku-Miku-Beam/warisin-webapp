@@ -13,35 +13,132 @@ interface IUpdateApplicationData {
     motivation?: string;
 }
 
+// Type definitions for better auto-completion
+interface ArtisanUser {
+    id: string;
+    name: string;
+    profileImageUrl?: string | null;
+    location?: string | null;
+}
+
+interface Category {
+    id: string;
+    name: string;
+}
+
+interface ApplicantProfile {
+    id: string;
+    interests?: string | null;
+    background?: string | null;
+}
+
+interface ApplicantUser {
+    id: string;
+    name: string;
+    email: string;
+    profileImageUrl?: string | null;
+    location?: string | null;
+    ApplicantProfile?: ApplicantProfile | null;
+}
+
+interface ProgramWithDetails {
+    id: string;
+    title: string;
+    description?: string | null;
+    duration?: number | null;
+    maxParticipants?: number | null;
+    price?: number | null;
+    isOpen: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+    artisanId: string;
+    categoryId: string;
+    artisan: ArtisanUser;
+    category: Category;
+}
+
+interface ApplicationWithDetails {
+    id: string;
+    message: string;
+    motivation?: string | null;
+    status: 'PENDING' | 'APPROVED' | 'REJECTED' | 'COMPLETED';
+    createdAt: Date;
+    updatedAt: Date;
+    ProgramId: string;
+    applicantId: string;
+    Program: ProgramWithDetails;
+    applicant: ApplicantUser;
+}
+
+interface ApplicationStats {
+    totalApplications: number;
+    recentApplications: number;
+    statusDistribution: Record<string, number>;
+    topPrograms: Array<{
+        id: string;
+        title: string;
+        artisan: {
+            name: string | null;
+        } | null;
+        applicationCount: number;
+    }>;
+    averageApplicationsPerProgram: number;
+}
+
+interface ProgramApplicationStats {
+    totalApplications: number;
+    statusDistribution: Record<string, number>;
+    applicationTrend: Array<{
+        date: string;
+        applications: number;
+    }>;
+}
+
+interface ApplicantApplicationStats {
+    totalApplications: number;
+    statusDistribution: Record<string, number>;
+    categoryDistribution: Record<string, number>;
+}
+
+interface ArtisanApplicationStats {
+    totalApplications: number;
+    statusDistribution: Record<string, number>;
+    programPerformance: Array<{
+        id: string;
+        title: string;
+        applicationCount: number;
+    }>;
+}
+
 interface IApplicationRepository {
     // Application management
-    getAllApplications(): Promise<any[]>;
-    getApplicationById(id: string): Promise<any | null>;
-    createApplication(data: ICreateApplicationData): Promise<any>;
-    updateApplication(id: string, data: IUpdateApplicationData): Promise<any>;
+    getAllApplications(): Promise<ApplicationWithDetails[]>;
+    getApplicationById(id: string): Promise<ApplicationWithDetails | null>;
+    createApplication(data: ICreateApplicationData): Promise<ApplicationWithDetails>;
+    updateApplication(id: string, data: IUpdateApplicationData): Promise<ApplicationWithDetails>;
     deleteApplication(id: string): Promise<void>;
     
     // Status management
-    approveApplication(id: string): Promise<any>;
-    rejectApplication(id: string, reason?: string): Promise<any>;
-    completeApplication(id: string): Promise<any>;
+    approveApplication(id: string): Promise<ApplicationWithDetails>;
+    rejectApplication(id: string, reason?: string): Promise<ApplicationWithDetails>;
+    completeApplication(id: string): Promise<ApplicationWithDetails>;
     
     // Query methods
-    getApplicationsByProgram(programId: string): Promise<any[]>;
-    getApplicationsByApplicant(applicantId: string): Promise<any[]>;
-    getApplicationsByArtisan(artisanId: string): Promise<any[]>;
-    getApplicationsByStatus(status: string): Promise<any[]>;
+    getApplicationsByProgram(programId: string): Promise<ApplicationWithDetails[]>;
+    getApplicationsByApplicant(applicantId: string): Promise<ApplicationWithDetails[]>;
+    getApplicationsByArtisan(artisanId: string): Promise<ApplicationWithDetails[]>;
+    getApplicationsByStatus(status: string): Promise<ApplicationWithDetails[]>;
     
     // Statistics
-    getApplicationStats(): Promise<any>;
-    getApplicationStatsByProgram(programId: string): Promise<any>;
-    getApplicationStatsByApplicant(applicantId: string): Promise<any>;
-    getApplicationStatsByArtisan(artisanId: string): Promise<any>;
+    getApplicationStats(): Promise<ApplicationStats>;
+    getApplicationStatsByProgram(programId: string): Promise<ProgramApplicationStats>;
+    getApplicationStatsByApplicant(applicantId: string): Promise<ApplicantApplicationStats>;
+    getApplicationStatsByArtisan(artisanId: string): Promise<ArtisanApplicationStats>;
 }
 
 const applicationRepository: IApplicationRepository = {
     // Application management
-    async getAllApplications() {
+    async getAllApplications(): Promise<ApplicationWithDetails[]> {
         return await prisma.application.findMany({
             include: {
                 Program: {
@@ -82,10 +179,10 @@ const applicationRepository: IApplicationRepository = {
             orderBy: {
                 createdAt: 'desc'
             }
-        });
+        }) as unknown as ApplicationWithDetails[];
     },
 
-    async getApplicationById(id: string) {
+    async getApplicationById(id: string): Promise<ApplicationWithDetails | null> {
         return await prisma.application.findUnique({
             where: { id },
             include: {
@@ -124,10 +221,10 @@ const applicationRepository: IApplicationRepository = {
                     }
                 }
             }
-        });
+        }) as unknown as ApplicationWithDetails | null;
     },
 
-    async createApplication(data: ICreateApplicationData) {
+    async createApplication(data: ICreateApplicationData): Promise<ApplicationWithDetails> {
         // Check if program exists and is open
         const program = await prisma.program.findUnique({
             where: { id: data.ProgramId }
@@ -181,10 +278,10 @@ const applicationRepository: IApplicationRepository = {
                     }
                 }
             }
-        });
+        }) as unknown as ApplicationWithDetails;
     },
 
-    async updateApplication(id: string, data: IUpdateApplicationData) {
+    async updateApplication(id: string, data: IUpdateApplicationData): Promise<ApplicationWithDetails> {
         return await prisma.application.update({
             where: { id },
             data: {
@@ -212,7 +309,7 @@ const applicationRepository: IApplicationRepository = {
                     }
                 }
             }
-        });
+        }) as unknown as ApplicationWithDetails;
     },
 
     async deleteApplication(id: string) {
@@ -237,7 +334,7 @@ const applicationRepository: IApplicationRepository = {
     },
 
     // Query methods
-    async getApplicationsByProgram(programId: string) {
+    async getApplicationsByProgram(programId: string): Promise<ApplicationWithDetails[]> {
         return await prisma.application.findMany({
             where: { ProgramId: programId },
             include: {
@@ -279,10 +376,10 @@ const applicationRepository: IApplicationRepository = {
             orderBy: {
                 createdAt: 'desc'
             }
-        });
+        }) as unknown as ApplicationWithDetails[];
     },
 
-    async getApplicationsByApplicant(applicantId: string) {
+    async getApplicationsByApplicant(applicantId: string): Promise<ApplicationWithDetails[]> {
         return await prisma.application.findMany({
             where: { applicantId },
             include: {
@@ -324,10 +421,10 @@ const applicationRepository: IApplicationRepository = {
             orderBy: {
                 createdAt: 'desc'
             }
-        });
+        }) as unknown as ApplicationWithDetails[];
     },
 
-    async getApplicationsByArtisan(artisanId: string) {
+    async getApplicationsByArtisan(artisanId: string): Promise<ApplicationWithDetails[]> {
         return await prisma.application.findMany({
             where: {
                 Program: {
@@ -373,10 +470,10 @@ const applicationRepository: IApplicationRepository = {
             orderBy: {
                 createdAt: 'desc'
             }
-        });
+        }) as unknown as ApplicationWithDetails[];
     },
 
-    async getApplicationsByStatus(status: string) {
+    async getApplicationsByStatus(status: string): Promise<ApplicationWithDetails[]> {
         return await prisma.application.findMany({
             where: { status },
             include: {
@@ -418,11 +515,11 @@ const applicationRepository: IApplicationRepository = {
             orderBy: {
                 createdAt: 'desc'
             }
-        });
+        }) as unknown as ApplicationWithDetails[];
     },
 
     // Statistics
-    async getApplicationStats() {
+    async getApplicationStats(): Promise<ApplicationStats> {
         const totalApplications = await prisma.application.count();
         
         const statusStats = await prisma.application.groupBy({
@@ -472,7 +569,9 @@ const applicationRepository: IApplicationRepository = {
                     }
                 });
                 return {
-                    ...program,
+                    id: program?.id || '',
+                    title: program?.title || '',
+                    artisan: program?.artisan || null,
                     applicationCount: tp._count.ProgramId
                 };
             })
@@ -492,7 +591,7 @@ const applicationRepository: IApplicationRepository = {
         };
     },
 
-    async getApplicationStatsByProgram(programId: string) {
+    async getApplicationStatsByProgram(programId: string): Promise<ProgramApplicationStats> {
         const totalApplications = await prisma.application.count({
             where: { ProgramId: programId }
         });
@@ -540,7 +639,7 @@ const applicationRepository: IApplicationRepository = {
         };
     },
 
-    async getApplicationStatsByApplicant(applicantId: string) {
+    async getApplicationStatsByApplicant(applicantId: string): Promise<ApplicantApplicationStats> {
         const totalApplications = await prisma.application.count({
             where: { applicantId }
         });
@@ -580,7 +679,7 @@ const applicationRepository: IApplicationRepository = {
         };
     },
 
-    async getApplicationStatsByArtisan(artisanId: string) {
+    async getApplicationStatsByArtisan(artisanId: string): Promise<ArtisanApplicationStats> {
         const totalApplications = await prisma.application.count({
             where: {
                 Program: {
@@ -628,7 +727,8 @@ const applicationRepository: IApplicationRepository = {
                     }
                 });
                 return {
-                    ...program,
+                    id: program?.id || '',
+                    title: program?.title || '',
                     applicationCount: ps._count.ProgramId
                 };
             })
@@ -650,9 +750,11 @@ export { applicationRepository };
 
 // Export interfaces
     export type {
-        IApplicationRepository,
+        ApplicantApplicationStats, ApplicantProfile,
+        ApplicantUser, ApplicationStats, ApplicationWithDetails, ArtisanApplicationStats, ArtisanUser,
+        Category, IApplicationRepository,
         ICreateApplicationData,
-        IUpdateApplicationData
+        IUpdateApplicationData, ProgramApplicationStats, ProgramWithDetails
     };
 
 // Application utility functions

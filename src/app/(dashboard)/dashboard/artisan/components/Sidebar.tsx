@@ -10,8 +10,6 @@ const Sidebar = async () => {
     return null;
   }
 
-  console.log("ROLEEE",user)
-
   return (
     <aside className="w-full md:w-64 bg-white h-full border-r px-6 py-8 flex flex-col gap-6">
       <div>
