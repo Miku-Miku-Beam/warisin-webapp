@@ -10,7 +10,7 @@ type MainContentProps = {
 };
 
 const MainContent = ({ totalApplied, applications, user }: MainContentProps) => (
-  <div className="flex-1 bg-gray-50 min-h-screen p-8">
+  <div className="flex-1 bg-gray-50 n p-8">
     <h1 className="text-3xl font-bold mb-6">My Applications</h1>
     <div className="bg-white rounded-xl shadow p-6 mb-8 flex items-center gap-8">
       <div>

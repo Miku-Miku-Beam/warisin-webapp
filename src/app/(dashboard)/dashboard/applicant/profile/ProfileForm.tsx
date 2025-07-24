@@ -67,7 +67,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
 
 
   return (
-    <form className="max-w-lg space-y-4 bg-white/70 p-8 rounded-xl shadow">
+    <form className="w-full space-y-4 bg-white/70 p-8 rounded-xl shadow">
       {form.profileImageUrl && (
         <div className="flex flex-col items-center mb-4">
           <img
