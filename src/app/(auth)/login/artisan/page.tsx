@@ -32,7 +32,6 @@ export default function ArtisanLogin() {
             if (response.ok) {
                 const data = await response.json();
                 console.log('User logged in successfully:', data);
-                // Redirect to artisan dashboard
                 window.location.href = '/';
             } else {
                 console.log(response);
