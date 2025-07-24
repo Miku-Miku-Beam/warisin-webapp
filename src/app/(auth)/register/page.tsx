@@ -1,21 +1,24 @@
 "use client"
 import { clientAuth } from "@/lib/firebase/client";
 import { ROLE } from "@/lib/static";
-import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import Link from "next/link";
 import { useState } from "react";
 
-export default function Login() {
+export default function Register() {
     const provider = new GoogleAuthProvider();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [name, setName] = useState("");
+    const [role, setRole] = useState(ROLE.APPLICANT);
     const [loading, setLoading] = useState(false);
 
-    async function signInWithGoogle() {
+    async function signUpWithGoogle() {
         setLoading(true);
         try {
             const userCredential = await signInWithPopup(clientAuth, provider);
-            console.log('User signed in with Google:', userCredential.user.uid);
+            console.log('User signed up with Google:', userCredential.user.uid);
 
             const response = await fetch('/api/login', {
                 method: 'POST',
@@ -24,40 +27,51 @@ export default function Login() {
                     'Authorization': `Bearer ${await userCredential.user.getIdToken()}`
                 },
                 body: JSON.stringify({
-                    role: ROLE.APPLICANT, // Default role for login
+                    role: role,
                     provider: 'google'
                 })
             });
 
             if (response.ok) {
                 const data = await response.json();
-                console.log('User logged in successfully:', data);
-                // Redirect to dashboard
+                console.log('User registered successfully:', data);
+                // Redirect to dashboard or home
                 window.location.href = '/';
             } else {
                 console.log(response);
-                throw new Error('Error logging in');
+                throw new Error('Error registering user');
             }
         } catch (error) {
-            console.error('Error signing in with Google:', error);
+            console.error('Error signing up with Google:', error);
             alert(error instanceof Error ? error.message : 'An error occurred');
         } finally {
             setLoading(false);
         }
     }
 
-    async function handleEmailLogin() {
-        if (!email || !password) {
-            alert('Please enter email and password');
+    async function handleEmailSignUp() {
+        if (!email || !password || !confirmPassword) {
+            alert('Please fill all required fields');
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            alert('Passwords do not match');
+            return;
+        }
+
+        if (password.length < 6) {
+            alert('Password must be at least 6 characters');
             return;
         }
 
         setLoading(true);
         try {
-            // Sign in existing user
-            const userCredential = await signInWithEmailAndPassword(clientAuth, email, password);
-            console.log('User signed in:', userCredential.user.uid);
+            // Register new user with Firebase
+            const userCredential = await createUserWithEmailAndPassword(clientAuth, email, password);
+            console.log('User registered:', userCredential.user.uid);
 
+            // Send user data to backend
             const response = await fetch('/api/login', {
                 method: 'POST',
                 headers: {
@@ -65,22 +79,24 @@ export default function Login() {
                     'Authorization': `Bearer ${await userCredential.user.getIdToken()}`
                 },
                 body: JSON.stringify({
+                    role: role,
                     provider: 'email',
-                    isNewUser: false
+                    isNewUser: true,
+                    name: name
                 })
             });
 
             if (response.ok) {
                 const data = await response.json();
-                console.log('User logged in successfully:', data);
-                // Redirect to dashboard
+                console.log('User registered successfully:', data);
+                // Redirect to dashboard or home
                 window.location.href = '/';
             } else {
                 console.log(response);
-                throw new Error('Error logging in');
+                throw new Error('Error registering user');
             }
         } catch (error) {
-            console.error('Error with email login:', error);
+            console.error('Error with email registration:', error);
             alert(error instanceof Error ? error.message : 'An error occurred');
         } finally {
             setLoading(false);
@@ -90,13 +106,59 @@ export default function Login() {
     return (
         <div className="font-sans flex justify-center items-center min-h-screen p-8">
             <div className="flex flex-col items-center gap-6 w-full max-w-md">
-                <h1 className="text-3xl font-bold text-center">Sign In</h1>
+                <h1 className="text-3xl font-bold text-center">Create Account</h1>
 
-                {/* Email/Password Form */}
+                {/* Role Selection */}
+                <div className="w-full">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Register as:
+                    </label>
+                    <div className="flex gap-4">
+                        <label className="flex items-center">
+                            <input
+                                type="radio"
+                                value={ROLE.APPLICANT}
+                                checked={role === ROLE.APPLICANT}
+                                onChange={(e) => setRole(e.target.value)}
+                                className="mr-2"
+                                disabled={loading}
+                            />
+                            APPLICANT
+                        </label>
+                        <label className="flex items-center">
+                            <input
+                                type="radio"
+                                value={ROLE.ARTISAN}
+                                checked={role === ROLE.ARTISAN}
+                                onChange={(e) => setRole(e.target.value)}
+                                className="mr-2"
+                                disabled={loading}
+                            />
+                            Artisan
+                        </label>
+                    </div>
+                </div>
+
+                {/* Registration Form */}
                 <div className="w-full space-y-4">
                     <div>
+                        <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                            Full Name
+                        </label>
+                        <input
+                            id="name"
+                            type="text"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            placeholder="Enter your full name"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            disabled={loading}
+                        />
+                    </div>
+
+                    <div>
                         <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                            Email
+                            Email *
                         </label>
                         <input
                             id="email"
@@ -106,30 +168,48 @@ export default function Login() {
                             placeholder="Enter your email"
                             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                             disabled={loading}
+                            required
                         />
                     </div>
                     
                     <div>
                         <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                            Password
+                            Password *
                         </label>
                         <input
                             id="password"
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            placeholder="Enter your password"
+                            placeholder="Enter your password (min 6 characters)"
                             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                             disabled={loading}
+                            required
+                        />
+                    </div>
+
+                    <div>
+                        <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
+                            Confirm Password *
+                        </label>
+                        <input
+                            id="confirmPassword"
+                            type="password"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            placeholder="Confirm your password"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            disabled={loading}
+                            required
                         />
                     </div>
 
                     <button
-                        onClick={handleEmailLogin}
+                        onClick={handleEmailSignUp}
                         disabled={loading}
                         className="w-full px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        {loading ? 'Signing In...' : 'Sign In'}
+                        {loading ? 'Creating Account...' : 'Create Account'}
                     </button>
                 </div>
 
@@ -140,9 +220,9 @@ export default function Login() {
                     <div className="flex-1 h-px bg-gray-300"></div>
                 </div>
 
-                {/* Google Sign In */}
+                {/* Google Sign Up */}
                 <button
-                    onClick={signInWithGoogle}
+                    onClick={signUpWithGoogle}
                     disabled={loading}
                     className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
@@ -152,19 +232,19 @@ export default function Login() {
                         <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
                         <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                     </svg>
-                    {loading ? 'Signing In...' : 'Sign in with Google'}
+                    {loading ? 'Creating Account...' : 'Sign up with Google'}
                 </button>
 
-                {/* Register Link */}
+                {/* Login Link */}
                 <div className="text-center">
                     <p className="text-sm text-gray-600">
-                        Don't have an account?{' '}
-                        <Link href="/register" className="text-blue-600 hover:underline">
-                            Create one here
+                        Already have an account?{' '}
+                        <Link href="/login" className="text-blue-600 hover:underline">
+                            Sign in here
                         </Link>
                     </p>
                 </div>
             </div>
         </div>
     );
-} 
+}
