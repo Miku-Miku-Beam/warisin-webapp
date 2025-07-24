@@ -123,7 +123,10 @@ export async function POST(request: NextRequest) {
 
             // Set session cookie
             try {
-                (await cookies()).set('session', newUser.id, {
+                (await cookies()).set('session', JSON.stringify({
+                    userId: newUser.id,
+                    role: newUser.role,
+                }), {
                     httpOnly: true,
                     secure: process.env.NODE_ENV === 'production',
                     sameSite: 'strict',
