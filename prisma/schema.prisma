@@ -12,7 +12,7 @@ model User {
   id               String            @id @default(cuid())
   email            String            @unique
   name             String?
-  role             Role              @default(Applicant)
+  role             Role              @default(APPLICANT)
   bio              String?
   profileImageUrl  String?
   location         String?
@@ -93,6 +93,6 @@ model Application {
 }
 
 enum Role {
-  Applicant
+  APPLICANT
   ARTISAN
 }
