@@ -32,8 +32,12 @@ export default function Login() {
             if (response.ok) {
                 const data = await response.json();
                 console.log('User logged in successfully:', data);
-                // Redirect to dashboard
-                window.location.href = '/';
+                // Redirect to getstarted if user is new or not onboarded
+                if (data.onboarded === false || data.isNewUser === true) {
+                    window.location.href = '/getstarted';
+                } else {
+                    window.location.href = '/';
+                }
             } else {
                 console.log(response);
                 throw new Error('Error logging in');
@@ -74,8 +78,12 @@ export default function Login() {
             if (response.ok) {
                 const data = await response.json();
                 console.log('User logged in successfully:', data);
-                // Redirect to dashboard
-                window.location.href = '/';
+                // Redirect to getstarted if user is new or not onboarded
+                if (data.isNewUser === undefined || data.isNewUser === true) {
+                    window.location.href = '/getstarted';
+                } else {
+                    window.location.href = '/';
+                }
             } else {
                 console.log(response);
                 throw new Error('Error logging in');
