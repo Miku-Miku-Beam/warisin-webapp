@@ -28,7 +28,7 @@ export default function RootLayout({
       <head>
         <meta charSet="utf-8" />
       </head>
-      <body className="font-sans text-gray-800 bg-yellow-50 min-h-screen">
+      <body className="font-sans text-gray-800 min-h-screen">
         <Header />
         {children}
       </body>
