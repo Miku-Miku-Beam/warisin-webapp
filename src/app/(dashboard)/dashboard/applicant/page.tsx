@@ -1,37 +1,32 @@
-"use client";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import MainContent from './components/MainContent';
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { PrismaClient } from "../../../../../generated";
 import Sidebar from './components/Sidebar';
+import MainContent from './components/MainContent';
 
-export default function ApplicantDashboardPage() {
-  const [user, setUser] = useState(null);
-  const router = useRouter();
-  const totalApplied = 0;
-  const applications = [];
+const prisma = new PrismaClient();
 
-  useEffect(() => {
-    // Ambil user dari localStorage (atau sessionStorage)
-    const userData = localStorage.getItem("user");
-    if (userData) {
-      setUser(JSON.parse(userData));
-    } else {
-      router.replace("/login/applicant");
-    }
-  }, [router]);
+export default async function ApplicantDashboardPage() {
+  // Ambil user dari cookie (misal: cookie 'user')
+  const userCookie = cookies().get("user")?.value;
+  const user = userCookie ? JSON.parse(userCookie) : null;
 
-  function handleLogout() {
-    localStorage.removeItem("user");
-    router.replace("/login/applicant");
+  if (!user || user.role !== "APPLICANT") {
+    redirect("/login/applicant");
   }
 
-  if (!user) {
-    return null; // atau loading spinner
-  }
+  // Ambil data aplikasi user dari database (contoh: Application)
+  const applications = await prisma.application.findMany({
+    where: { applicantId: user.id },
+    include: { Program: true },
+    orderBy: { createdAt: "desc" },
+  });
+
+  const totalApplied = applications.length;
 
   return (
     <div className="flex min-h-screen">
-      <Sidebar user={user} onLogout={handleLogout} />
+      <Sidebar user={user} onLogout={null /* SSR, handle logout via API */} />
       <MainContent totalApplied={totalApplied} applications={applications} user={user} />
     </div>
   );
