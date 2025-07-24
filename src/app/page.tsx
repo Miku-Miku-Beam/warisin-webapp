@@ -1,13 +1,13 @@
-import HeroSection from './components/HeroSection';
-import VisiMisi from './components/VisiMisi';
-import TargetPengguna from './components/TargetPengguna';
-import FiturUtama from './components/FiturUtama';
 import ArtisanUnggulan from './components/ArtisanUnggulan';
 import CaraKerja from './components/CaraKerja';
-import Testimoni from './components/Testimoni';
-import FAQ from './components/FAQ';
 import CTASection from './components/CTASection';
+import FAQ from './components/FAQ';
+import FiturUtama from './components/FiturUtama';
 import Footer from './components/Footer';
+import HeroSection from './components/HeroSection';
+import TargetPengguna from './components/TargetPengguna';
+import Testimoni from './components/Testimoni';
+import VisiMisi from './components/VisiMisi';
 
 export default function HomePage() {
   return (
