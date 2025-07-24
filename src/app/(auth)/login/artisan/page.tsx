@@ -2,8 +2,8 @@
 import { clientAuth } from "@/lib/firebase/client";
 import { ROLE } from "@/lib/static";
 import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
-import { useState } from "react";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function ArtisanLogin() {
     const provider = new GoogleAuthProvider();
