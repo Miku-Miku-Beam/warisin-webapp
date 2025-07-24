@@ -32,7 +32,18 @@ export default function ArtisanLogin() {
             if (response.ok) {
                 const data = await response.json();
                 console.log('User logged in successfully:', data);
-                window.location.href = '/';
+                
+                // Store user data in localStorage for client-side access
+                if (data.user) {
+                    localStorage.setItem("artisan", JSON.stringify({
+                        email: data.user.email,
+                        name: data.user.name,
+                        role: data.user.role,
+                        id: data.user.id
+                    }));
+                }
+                
+                window.location.href = '/dashboard/artisan/profile';
             } else {
                 console.log(response);
                 throw new Error('Error logging in');
@@ -73,8 +84,19 @@ export default function ArtisanLogin() {
             if (response.ok) {
                 const data = await response.json();
                 console.log('User logged in successfully:', data);
+                
+                // Store user data in localStorage for client-side access
+                if (data.user) {
+                    localStorage.setItem("artisan", JSON.stringify({
+                        email: data.user.email,
+                        name: data.user.name,
+                        role: data.user.role,
+                        id: data.user.id
+                    }));
+                }
+                
                 // Redirect to artisan dashboard
-                window.location.href = '/';
+                window.location.href = '/dashboard/artisan/profile';
             } else {
                 console.log(response);
                 throw new Error('Error logging in');
