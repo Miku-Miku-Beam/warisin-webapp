@@ -1,8 +1,8 @@
 "use client";
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Sidebar from './components/Sidebar';
+import { useEffect, useState } from "react";
 import MainContent from './components/MainContent';
+import Sidebar from './components/Sidebar';
 
 export default function ApplicantDashboardPage() {
   const [user, setUser] = useState(null);

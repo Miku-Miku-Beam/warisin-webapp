@@ -1,6 +1,5 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
@@ -15,16 +14,15 @@ datasource db {
 }
 
 enum Role {
-  APLICANT
+  APPLICANT
   ARTISAN
-  ADMIN
 }
 
 model User {
   id              String  @id @default(cuid())
   email           String  @unique
   name            String?
-  role            Role    @default(APLICANT)
+  role            Role    @default(APPLICANT)
   bio             String?
   profileImageUrl String?
   location        String?
@@ -34,10 +32,12 @@ model User {
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
   ArtisanProfile  ArtisanProfile?
-  AplicantProfile AplicantProfile?
+  ApplicantProfile ApplicantProfile?
+  ArtisanPrograms Program[]        @relation("ArtisanPrograms")
+  Application     Application[]
 }
 
-model AplicantProfile {
+model ApplicantProfile {
   id     String @id @default(cuid())
   userId String @unique
   user   User   @relation(fields: [userId], references: [id])
@@ -56,12 +56,65 @@ model ArtisanProfile {
   userId String @unique
   user   User   @relation(fields: [userId], references: [id])
 
-  story      String  @db.Text
-  expertise  String 
-  location   String? 
-  imageUrl   String?
+  story     String  @db.Text
+  expertise String
+  location  String?
+  imageUrl  String?
 
   works String[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model HerittageCategory {
+  id   String @id @default(cuid())
+  name String @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Program Program[]
+}
+
+model Program {
+  id String @id @default(cuid())
+
+  title  String
+  isOpen Boolean @default(true)
+
+  description String            @db.Text
+  duration    String
+  criteria    String            @db.Text
+
+  category    HerittageCategory @relation(fields: [categoryId], references: [id])
+  categoryId  String
+
+  artisan   User   @relation("ArtisanPrograms", fields: [artisanId], references: [id])
+  artisanId String
+
+  applications Application[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Application {
+  id String @id @default(cuid())
+
+  message String @db.Text
+
+  Program   Program @relation(fields: [ProgramId], references: [id])
+  ProgramId String
+
+  applicant   User   @relation(fields: [applicantId], references: [id])
+  applicantId String
+
+  status String @default("PENDING")
+
+  motivation String? @db.Text
+
+  cvUrl String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

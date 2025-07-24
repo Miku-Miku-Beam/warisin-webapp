@@ -5,7 +5,7 @@ import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from 
 import Link from "next/link";
 import { useState } from "react";
 
-export default function ArtisanLogin() {
+export default function Login() {
     const provider = new GoogleAuthProvider();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -24,7 +24,7 @@ export default function ArtisanLogin() {
                     'Authorization': `Bearer ${await userCredential.user.getIdToken()}`
                 },
                 body: JSON.stringify({
-                    role: ROLE.ARTISAN,
+                    role: ROLE.APPLICANT, // Default role for login
                     provider: 'google'
                 })
             });
@@ -32,6 +32,7 @@ export default function ArtisanLogin() {
             if (response.ok) {
                 const data = await response.json();
                 console.log('User logged in successfully:', data);
+                // Redirect to dashboard
                 window.location.href = '/';
             } else {
                 console.log(response);
@@ -64,7 +65,6 @@ export default function ArtisanLogin() {
                     'Authorization': `Bearer ${await userCredential.user.getIdToken()}`
                 },
                 body: JSON.stringify({
-                    role: ROLE.ARTISAN,
                     provider: 'email',
                     isNewUser: false
                 })
@@ -73,7 +73,7 @@ export default function ArtisanLogin() {
             if (response.ok) {
                 const data = await response.json();
                 console.log('User logged in successfully:', data);
-                // Redirect to artisan dashboard
+                // Redirect to dashboard
                 window.location.href = '/';
             } else {
                 console.log(response);
@@ -90,7 +90,7 @@ export default function ArtisanLogin() {
     return (
         <div className="font-sans flex justify-center items-center min-h-screen p-8">
             <div className="flex flex-col items-center gap-6 w-full max-w-md">
-                <h1 className="text-3xl font-bold text-center text-orange-600">Artisan Login</h1>
+                <h1 className="text-3xl font-bold text-center">Sign In</h1>
 
                 {/* Email/Password Form */}
                 <div className="w-full space-y-4">
@@ -104,7 +104,7 @@ export default function ArtisanLogin() {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder="Enter your email"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                             disabled={loading}
                         />
                     </div>
@@ -119,7 +119,7 @@ export default function ArtisanLogin() {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             placeholder="Enter your password"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                             disabled={loading}
                         />
                     </div>
@@ -127,9 +127,9 @@ export default function ArtisanLogin() {
                     <button
                         onClick={handleEmailLogin}
                         disabled={loading}
-                        className="w-full px-4 py-2 bg-orange-600 text-white rounded hover:bg-orange-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        {loading ? 'Signing In...' : 'Sign In as Artisan'}
+                        {loading ? 'Signing In...' : 'Sign In'}
                     </button>
                 </div>
 
@@ -158,23 +158,14 @@ export default function ArtisanLogin() {
                 {/* Register Link */}
                 <div className="text-center">
                     <p className="text-sm text-gray-600">
-                        Don't have an artisan account?{' '}
-                        <Link href="/register" className="text-orange-600 hover:underline">
+                        Don't have an account?{' '}
+                        <Link href="/register" className="text-blue-600 hover:underline">
                             Create one here
-                        </Link>
-                    </p>
-                </div>
-
-                {/* Regular Login Link */}
-                <div className="text-center">
-                    <p className="text-sm text-gray-600">
-                        Not an artisan?{' '}
-                        <Link href="/login" className="text-blue-600 hover:underline">
-                            Regular Login
                         </Link>
                     </p>
                 </div>
             </div>
         </div>
     );
-}
+} 
+

@@ -12,7 +12,7 @@ const ArtisanUnggulan = () => (
           <h3 className="font-semibold text-lg text-yellow-700 mb-1">{a.name}</h3>
           <p className="text-gray-700 mb-1"><b>{a.bidang}</b></p>
           <small className="text-gray-500 text-center">{a.kisah}</small>
-        </div>
+        </div>  
       ))}
     </div>
   </section>
