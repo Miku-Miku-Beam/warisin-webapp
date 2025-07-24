@@ -34,7 +34,7 @@ export default async function ProgramPage({ params }: { params: { id: string } }
   };
 
   return (
-    <main className="min-h-screen bg-yellow-50">
+    <main className="min-h-screen">
       <ProgramDetail program={safeProgram} />
     </main>
   );

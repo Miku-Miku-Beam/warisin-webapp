@@ -35,8 +35,12 @@ export default function Register() {
             if (response.ok) {
                 const data = await response.json();
                 console.log('User registered successfully:', data);
-                // Redirect to dashboard or home
-                window.location.href = '/';
+                // Redirect to getstarted if user is new or not onboarded
+                if (data.onboarded === false || data.isNewUser === true) {
+                    window.location.href = '/getstarted';
+                } else {
+                    window.location.href = '/';
+                }
             } else {
                 console.log(response);
                 throw new Error('Error registering user');
@@ -89,8 +93,12 @@ export default function Register() {
             if (response.ok) {
                 const data = await response.json();
                 console.log('User registered successfully:', data);
-                // Redirect to dashboard or home
-                window.location.href = '/';
+                // Redirect to getstarted if user is new or not onboarded
+                if (data.onboarded === false || data.isNewUser === true) {
+                    window.location.href = '/getstarted';
+                } else {
+                    window.location.href = '/';
+                }
             } else {
                 console.log(response);
                 throw new Error('Error registering user');
