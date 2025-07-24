@@ -1,8 +1,27 @@
+import HeroSection from './components/HeroSection';
+import VisiMisi from './components/VisiMisi';
+import TargetPengguna from './components/TargetPengguna';
+import FiturUtama from './components/FiturUtama';
+import ArtisanUnggulan from './components/ArtisanUnggulan';
+import CaraKerja from './components/CaraKerja';
+import Testimoni from './components/Testimoni';
+import FAQ from './components/FAQ';
+import CTASection from './components/CTASection';
+import Footer from './components/Footer';
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <p>HALO</p>
-    </div>
+    <main className="container mx-auto px-4 py-8">
+      <HeroSection />
+      <VisiMisi />
+      <TargetPengguna />
+      <FiturUtama />
+      <ArtisanUnggulan />
+      <CaraKerja />
+      <Testimoni />
+      <FAQ />
+      <CTASection />
+      <Footer />
+    </main>
   );
 }
