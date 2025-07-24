@@ -9,11 +9,10 @@ const firebaseConfig = {
     messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
     appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
-console.log(firebaseConfig);
 
 // Initialize Firebase app only if it hasn't been initialized already
-const app =  getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 
-const clientAuth = await getAuth(app);
+const clientAuth = getAuth(app);
 export { clientAuth };
 

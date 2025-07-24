@@ -2,7 +2,7 @@ import { PrismaClient } from '../generated';
 
 // Define Role enum locally to match schema
 enum Role {
-    APPLICANT = 'APPLICANT',
+    APPLICANT = 'Applicant',
     ARTISAN = 'ARTISAN'
 }
 
@@ -391,7 +391,7 @@ async function main() {
 
     console.log(`
 📊 Summary:
-- Users: ${userCount} (${await prisma.user.count({ where: { role: 'ARTISAN' } })} artisans, ${await prisma.user.count({ where: { role: 'APPLICANT' } })} APPLICANTs)
+- Users: ${userCount} (${await prisma.user.count({ where: { role: 'ARTISAN' } })} artisans, ${await prisma.user.count({ where: { role: Role.APPLICANT } })} APPLICANTs)
 - Heritage Categories: ${categoryCount}
 - Programs: ${programCount} (${await prisma.program.count({ where: { isOpen: true } })} open, ${await prisma.program.count({ where: { isOpen: false } })} closed)
 - Applications: ${applicationCount}
