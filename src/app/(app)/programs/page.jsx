@@ -1,4 +1,4 @@
-import EventList from './components/EventList';
+import ProgramsList from './components/programsList';
 import { PrismaClient } from '../../../../generated';
 
 const prisma = new PrismaClient();
@@ -20,7 +20,7 @@ export default async function EventPage() {
     console.error('Error fetching events:', e);
   }
 
-  // Mapping sesuai schema
+  // Mapping sesuai schema dan kebutuhan card
   const mappedEvents = events.map(event => ({
     id: event.id,
     title: event.title,
@@ -35,6 +35,9 @@ export default async function EventPage() {
     applications: event.applications.length,
     createdAt: event.createdAt,
     updatedAt: event.updatedAt,
+    programImageUrl: event.programImageUrl || "/default-program.jpg", // pastikan field ini ada di schema
+    artisanAvatar: event.artisan?.profileImageUrl || "/default-avatar.png",
+    artisanName: event.artisan?.name || 'Unknown',
   }));
 
   if (error) {
@@ -47,7 +50,7 @@ export default async function EventPage() {
       {mappedEvents.length === 0 ? (
         <div className="text-gray-500">No events found.</div>
       ) : (
-        <EventList events={mappedEvents} />
+        <ProgramsList events={mappedEvents} />
       )}
     </main>
   );
