@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
                 name: name || decodedToken.name || '',
                 profileImageUrl: picture || '',
                 authId: uid,
-                role: role || 'Applicant',
+                role: role || 'APPLICANT',
             },
             include: {
                 ArtisanProfile: true,

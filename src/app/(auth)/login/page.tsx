@@ -65,6 +65,7 @@ export default function Login() {
                     'Authorization': `Bearer ${await userCredential.user.getIdToken()}`
                 },
                 body: JSON.stringify({
+                    role: ROLE.APPLICANT,
                     provider: 'email',
                     isNewUser: false
                 })
