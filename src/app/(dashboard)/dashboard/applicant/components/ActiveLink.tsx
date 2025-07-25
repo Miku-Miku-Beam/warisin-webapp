@@ -9,8 +9,7 @@ interface ActiveLinkProps {
 }
 
 const ActiveLink = ({ href, children, exactMatch = false }: ActiveLinkProps) => {
-  const pathname = usePathname();
-  
+  const pathname = usePathname();  
   const isActive = exactMatch 
     ? pathname === href 
     : pathname.startsWith(href);

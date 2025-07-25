@@ -1,5 +1,6 @@
 import { repositories } from "@/lib/repository";
 import { cookies } from "next/headers";
+import Image from 'next/image';
 import Link from "next/link";
 
 const getProgramsData = async () => {
@@ -19,8 +20,6 @@ const getProgramsData = async () => {
         return [];
     }
 
-    console.log(artisanId);
-
     const programs = await repositories.program.getProgramsByArtisan(artisanId);
 
     return programs
@@ -28,8 +27,6 @@ const getProgramsData = async () => {
 
 export default async function ArtisanProgramPage() {
     const programs = await getProgramsData();
-
-    console.log(programs);
 
     return (
         <div className="container mx-auto px-4 py-8">
@@ -45,7 +42,7 @@ export default async function ArtisanProgramPage() {
                 {/* Add Program Button */}
                 <Link
                     href="/dashboard/artisan/programs/add"
-                    className="mt-4 sm:mt-0 inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200 shadow-md hover:shadow-lg"
+                    className="mt-4 sm:mt-0 inline-flex items-center px-6 py-3 bg-orange-600 text-white font-medium rounded-lg hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition duration-200 shadow-md hover:shadow-lg"
                 >
                     <svg 
                         className="w-5 h-5 mr-2" 
@@ -111,133 +108,73 @@ export default async function ArtisanProgramPage() {
                 </div>
             ) : (
                 /* Programs Grid */
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
                     {programs.map((program) => (
                         <div 
                             key={program.id} 
-                            className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden border border-gray-200"
+                            className="bg-white/70 backdrop-blur-md rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-200 overflow-hidden border border-blue-100 min-h-[540px] flex flex-col relative group"
                         >
                             {/* Program Image */}
-                            <div className="relative h-48 bg-gradient-to-r from-blue-500 to-purple-600">
-                                {program.programImageUrl ? (
-                                    <img
-                                        src={program.programImageUrl}
-                                        alt={program.title}
-                                        className="w-full h-full object-cover"
-                                    />
-                                ) : (
-                                    <div className="w-full h-full flex items-center justify-center">
-                                        <div className="text-center text-white">
-                                            <svg 
-                                                className="w-16 h-16 mx-auto mb-2 opacity-80" 
-                                                fill="none" 
-                                                stroke="currentColor" 
-                                                viewBox="0 0 24 24"
-                                            >
-                                                <path 
-                                                    strokeLinecap="round" 
-                                                    strokeLinejoin="round" 
-                                                    strokeWidth={1.5} 
-                                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" 
-                                                />
-                                            </svg>
-                                            <p className="text-sm opacity-80">{program.category.name}</p>
-                                        </div>
-                                    </div>
-                                )}
-                                
+                            <div className="relative h-48 w-full">
+                                <img
+                                    src={
+                                        typeof program.programImageUrl === 'string' && program.programImageUrl.trim() !== ''
+                                            ? program.programImageUrl
+                                            : '/default-program.png'
+                                    }
+                                    alt={program.title}
+                                    className="w-full h-full object-cover object-center rounded-t-3xl border-b border-blue-100 group-hover:scale-105 transition-transform duration-200"
+                                    loading="lazy"
+                                />
                                 {/* Status Badge */}
-                                <div className="absolute top-4 right-4">
-                                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+                                <div className="absolute top-4 right-4 z-10">
+                                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold shadow-sm border border-white/60 backdrop-blur-md ${
                                         program.isOpen 
                                             ? 'bg-green-100 text-green-800' 
                                             : 'bg-red-100 text-red-800'
                                     }`}>
-                                        {program.isOpen ? 'Terbuka' : 'Tertutup'}
+                                        {program.isOpen ? 'Open' : 'Closed'}
                                     </span>
                                 </div>
                             </div>
 
                             {/* Program Content */}
-                            <div className="p-6">
-                                <div className="flex items-start justify-between mb-3">
-                                    <div className="flex-1">
-                                        <h3 className="text-xl font-semibold text-gray-900 mb-1 line-clamp-2">
-                                            {program.title}
-                                        </h3>
-                                        <p className="text-sm text-blue-600 font-medium">
-                                            {program.category.name}
-                                        </p>
-                                    </div>
+                            <div className="flex-1 flex flex-col p-6">
+                                <div className="mb-2">
+                                    <h3 className="text-xl font-bold text-gray-900 mb-1 line-clamp-2">{program.title}</h3>
+                                    <p className="text-sm text-orange-600 font-medium">{program.category.name}</p>
                                 </div>
-
-                                <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                                    {program.description}
-                                </p>
-
+                                <p className="text-gray-600 text-sm mb-4 line-clamp-2">{program.description}</p>
                                 {/* Program Details */}
-                                <div className="space-y-2 mb-6">
-                                    <div className="flex items-center text-sm text-gray-600">
-                                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-                                        <span className="font-medium">Durasi:</span>
-                                        <span className="ml-1">{program.duration}</span>
-                                    </div>
-                                    
-                                    <div className="flex items-center text-sm text-gray-600">
-                                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                        </svg>
-                                        <span className="font-medium">Lokasi:</span>
-                                        <span className="ml-1 truncate">{program.location}</span>
-                                    </div>
-                                    
-                                    <div className="flex items-center text-sm text-gray-600">
-                                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                        </svg>
-                                        <span className="font-medium">Mulai:</span>
-                                        <span className="ml-1">{new Date(program.startDate).toLocaleDateString('id-ID')}</span>
-                                    </div>
+                                <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs text-gray-600 mb-4">
+                                    <div className="flex items-center gap-1"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> <span>Duration:</span> <span className="font-semibold ml-1">{program.duration}</span></div>
+                                    <div className="flex items-center gap-1"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg> <span>Location:</span> <span className="font-semibold ml-1 truncate">{program.location}</span></div>
+                                    <div className="flex items-center gap-1 col-span-2"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg> <span>Start:</span> <span className="font-semibold ml-1">{new Date(program.startDate).toLocaleDateString('id-ID')}</span></div>
                                 </div>
-
                                 {/* Statistics */}
-                                <div className="flex items-center justify-between mb-6 p-3 bg-gray-50 rounded-lg">
-                                    <div className="text-center">
-                                        <div className="text-lg font-semibold text-gray-900">
-                                            {program.applications.length}
-                                        </div>
-                                        <div className="text-xs text-gray-600">Pendaftar</div>
+                                <div className="flex items-center justify-between mb-4 p-3 bg-white/60 rounded-xl shadow-inner border border-blue-50">
+                                    <div className="text-center flex-1">
+                                        <div className="text-lg font-bold text-blue-700">{program.applications.length}</div>
+                                        <div className="text-xs text-gray-500">Applicants</div>
                                     </div>
-                                    <div className="text-center">
-                                        <div className="text-lg font-semibold text-green-600">
-                                            {program.applications.filter(app => app.status === 'APPROVED').length}
-                                        </div>
-                                        <div className="text-xs text-gray-600">Diterima</div>
+                                    <div className="text-center flex-1">
+                                        <div className="text-lg font-bold text-green-600">{program.applications.filter(app => app.status === 'APPROVED').length}</div>
+                                        <div className="text-xs text-gray-500">Approved</div>
                                     </div>
-                                    <div className="text-center">
-                                        <div className="text-lg font-semibold text-yellow-600">
-                                            {program.applications.filter(app => app.status === 'PENDING').length}
-                                        </div>
-                                        <div className="text-xs text-gray-600">Menunggu</div>
+                                    <div className="text-center flex-1">
+                                        <div className="text-lg font-bold text-yellow-600">{program.applications.filter(app => app.status === 'PENDING').length}</div>
+                                        <div className="text-xs text-gray-500">Pending</div>
                                     </div>
                                 </div>
-
+                                <div className="flex-1" />
                                 {/* Action Buttons */}
-                                <div className="flex flex-col sm:flex-row gap-3">
+                                <div className="flex flex-col sm:flex-row gap-3 mt-4">
                                     <Link
                                         href={`/programs/${program.id}`}
-                                        className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg text-center text-sm font-medium hover:bg-blue-700 transition duration-200"
+                                        className="flex-1 bg-orange-600 text-white px-4 py-2 rounded-lg text-center text-sm font-semibold shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+                                        aria-label={`View details of ${program.title}`}
                                     >
-                                        Lihat Detail
-                                    </Link>
-                                    <Link
-                                        href={`/dashboard/artisan/programs/${program.id}/edit`}
-                                        className="flex-1 bg-gray-200 text-gray-800 px-4 py-2 rounded-lg text-center text-sm font-medium hover:bg-gray-300 transition duration-200"
-                                    >
-                                        Edit Program
+                                        View Details
                                     </Link>
                                 </div>
                             </div>
@@ -248,33 +185,26 @@ export default async function ArtisanProgramPage() {
 
             {/* Quick Stats Summary */}
             {programs.length > 0 && (
-                <div className="mt-12 bg-white rounded-xl shadow-md p-6 border border-gray-200">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Ringkasan Program</h3>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div className="text-center p-4 bg-blue-50 rounded-lg">
-                            <div className="text-2xl font-bold text-blue-600">{programs.length}</div>
-                            <div className="text-sm text-gray-600">Total Program</div>
-                        </div>
-                        <div className="text-center p-4 bg-green-50 rounded-lg">
-                            <div className="text-2xl font-bold text-green-600">
-                                {programs.filter(p => p.isOpen).length}
-                            </div>
-                            <div className="text-sm text-gray-600">Program Aktif</div>
-                        </div>
-                        <div className="text-center p-4 bg-purple-50 rounded-lg">
-                            <div className="text-2xl font-bold text-purple-600">
-                                {programs.reduce((total, program) => total + program.applications.length, 0)}
-                            </div>
-                            <div className="text-sm text-gray-600">Total Pendaftar</div>
-                        </div>
-                        <div className="text-center p-4 bg-yellow-50 rounded-lg">
-                            <div className="text-2xl font-bold text-yellow-600">
-                                {programs.reduce((total, program) => 
-                                    total + program.applications.filter(app => app.status === 'PENDING').length, 0
-                                )}
-                            </div>
-                            <div className="text-sm text-gray-600">Menunggu Review</div>
-                        </div>
+                <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                    <div className="bg-white/80 backdrop-blur-md rounded-2xl shadow-lg border border-orange-100 p-7 flex flex-col items-center group transition-all duration-200 hover:shadow-2xl">
+                        <span className="text-3xl font-extrabold text-orange-600 mb-1">{programs.length}</span>
+                        <span className="text-base text-gray-700 font-medium">Total Programs</span>
+                        <span className="mt-2 text-xs text-gray-400">All programs you have created</span>
+                    </div>
+                    <div className="bg-white/80 backdrop-blur-md rounded-2xl shadow-lg border border-green-100 p-7 flex flex-col items-center group transition-all duration-200 hover:shadow-2xl">
+                        <span className="text-3xl font-extrabold text-green-600 mb-1">{programs.filter(p => p.isOpen).length}</span>
+                        <span className="text-base text-gray-700 font-medium">Active Programs</span>
+                        <span className="mt-2 text-xs text-gray-400">Programs currently running</span>
+                    </div>
+                    <div className="bg-white/80 backdrop-blur-md rounded-2xl shadow-lg border border-blue-100 p-7 flex flex-col items-center group transition-all duration-200 hover:shadow-2xl">
+                        <span className="text-3xl font-extrabold text-blue-600 mb-1">{programs.filter(p => !p.isOpen).length}</span>
+                        <span className="text-base text-gray-700 font-medium">Completed Programs</span>
+                        <span className="mt-2 text-xs text-gray-400">Programs that have been completed</span>
+                    </div>
+                    <div className="bg-white/80 backdrop-blur-md rounded-2xl shadow-lg border border-orange-100 p-7 flex flex-col items-center group transition-all duration-200 hover:shadow-2xl">
+                        <span className="text-3xl font-extrabold text-orange-600 mb-1">{programs.reduce((total, program) => total + program.applications.length, 0)}</span>
+                        <span className="text-base text-gray-700 font-medium">Total Applicants</span>
+                        <span className="mt-2 text-xs text-gray-400">All applicants across your programs</span>
                     </div>
                 </div>
             )}

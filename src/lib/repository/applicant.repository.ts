@@ -28,19 +28,22 @@ interface IApplicantRepository {
     createApplicantProfile(data: ICreateApplicantProfileData): Promise<any>;
     updateApplicantProfile(userId: string, data: IUpdateApplicantProfileData): Promise<any>;
     deleteApplicantProfile(userId: string): Promise<void>;
-    
+
     // Applicant's applications
     getMyApplications(applicantId: string): Promise<any[]>;
     applyToProgram(applicantId: string, data: IApplicantApplicationData): Promise<any>;
     withdrawApplication(applicantId: string, applicationId: string): Promise<void>;
-    
+
     // Program discovery
     browsePrograms(filters?: any, limit?: number): Promise<any[]>;
     searchPrograms(query: string, limit?: number): Promise<any[]>;
     getRecommendedPrograms(applicantId: string, limit?: number): Promise<any[]>;
-    
+
     // Applicant statistics
     getApplicantDashboard(applicantId: string): Promise<any>;
+
+    // Get all applicants who have applied to programs by a specific artisan
+    getApplicantsByArtisanId(artisanId: string): Promise<any[]>;
 }
 
 const applicantRepository: IApplicantRepository = {
@@ -75,6 +78,48 @@ const applicantRepository: IApplicantRepository = {
                 }
             }
         });
+    },
+    // Get all applicants who have applied to programs by a specific artisan
+    async getApplicantsByArtisanId(artisanId: string) {
+        // Cari semua program milik artisan
+        const programs = await prisma.program.findMany({
+            where: { artisanId },
+            select: { id: true }
+        });
+        const programIds = programs.map(p => p.id);
+        if (programIds.length === 0) return [];
+
+        // Cari semua aplikasi ke program tersebut
+        const applications = await prisma.application.findMany({
+            where: { ProgramId: { in: programIds } },
+            include: {
+                applicant: {
+                    include: {
+                        ApplicantProfile: true
+                    }
+                },
+                Program: {
+                    select: {
+                        id: true,
+                        title: true
+                    }
+                }
+            }
+        });
+
+        // Ambil data applicant unik
+        const applicantsMap = new Map();
+        for (const app of applications) {
+            if (app.applicant) {
+                applicantsMap.set(app.applicant.id, {
+                    ...app.applicant,
+                    appliedPrograms: applicantsMap.get(app.applicant.id)?.appliedPrograms
+                        ? [...applicantsMap.get(app.applicant.id).appliedPrograms, app.Program]
+                        : [app.Program]
+                });
+            }
+        }
+        return Array.from(applicantsMap.values());
     },
 
     async getApplicantProfile(userId: string) {

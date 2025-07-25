@@ -1,7 +1,7 @@
 import { getStorage } from 'firebase-admin/storage';
 import { app } from './admin';
 
-const storage = getStorage(app);
+export const storage = getStorage(app);
 
 export interface UploadResult {
     url: string;
@@ -70,11 +70,14 @@ export const uploadFile = async (
             options
         } = params;
 
+        
         const {
             maxSize = 10 * 1024 * 1024, // 10MB default
             allowedTypes = [],
             customFileName
         } = options || {};
+
+        console.log(`Uploading file: ${fileName} to ${storagePath} with MIME type ${mimeType}`);
 
         // Validate file type if specified
         if (allowedTypes.length > 0 && !allowedTypes.includes(mimeType)) {
@@ -95,7 +98,9 @@ export const uploadFile = async (
         const fullPath = `${storagePath}/${finalFileName}`;
 
         // Create storage reference
-        const fileRef = storage.bucket().file(fullPath);
+        const fileRef = storage.bucket(
+            process.env.FIREBASE_STORAGE_BUCKET
+        ).file(fullPath);
 
         // Upload file with metadata
         await fileRef.save(fileBuffer, {
@@ -114,6 +119,8 @@ export const uploadFile = async (
             action: 'read',
             expires: '03-01-2500' // Long expiry for public files
         });
+
+        console.log(`File uploaded successfully: ${url}`);  
 
         return {
             url,
