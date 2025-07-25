@@ -1,6 +1,21 @@
+import Link from 'next/link';
+
+type Program = {
+  id: string;
+  title?: string;
+  category?: { name?: string };
+  artisan?: { name?: string };
+};
+
+type Application = {
+  status: string;
+  createdAt: string | Date;
+  Program?: Program;
+};
+
 type MainContentProps = {
   totalApplied: number;
-  applications: any[];
+  applications: Application[];
   user: {
     id: string;
     email: string;
@@ -123,7 +138,7 @@ const MainContent = ({ totalApplied, applications, user }: MainContentProps) => 
             <p className="text-blue-100 mb-4">
               Temukan program warisan budaya terbaik dan kembangkan keterampilan tradisional Anda.
             </p>
-            <a
+            <Link
               href="/programs"
               className="inline-flex items-center px-6 py-3 bg-white text-blue-600 font-semibold rounded-lg hover:bg-gray-50 transition duration-200 shadow-md"
             >
@@ -131,7 +146,7 @@ const MainContent = ({ totalApplied, applications, user }: MainContentProps) => 
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
               Jelajahi Program
-            </a>
+            </Link>
           </div>
           <div className="hidden md:block">
             <svg className="w-24 h-24 text-blue-200" fill="currentColor" viewBox="0 0 24 24">
@@ -145,12 +160,12 @@ const MainContent = ({ totalApplied, applications, user }: MainContentProps) => 
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-gray-900">Aplikasi Terbaru</h2>
-          <a
+          <Link
             href="/dashboard/applicant/applications"
             className="text-blue-600 hover:text-blue-800 font-medium"
           >
             Lihat Semua
-          </a>
+          </Link>
         </div>
 
         {applications.length === 0 ? (
@@ -160,12 +175,12 @@ const MainContent = ({ totalApplied, applications, user }: MainContentProps) => 
             </svg>
             <h3 className="text-lg font-medium text-gray-900 mb-2">Belum ada aplikasi</h3>
             <p className="text-gray-500 mb-4">Anda belum mendaftar ke program manapun.</p>
-            <a
+            <Link
               href="/programs"
               className="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition duration-200"
             >
               Mulai Mendaftar
-            </a>
+            </Link>
           </div>
         ) : (
           <div className="space-y-4">
@@ -210,12 +225,12 @@ const MainContent = ({ totalApplied, applications, user }: MainContentProps) => 
                     </span>
 
                     {/* Action Button */}
-                    <a
+                    <Link
                       href={`/program/${app.Program?.id}`}
                       className="text-blue-600 hover:text-blue-800 text-sm font-medium"
                     >
                       Lihat Detail
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>
