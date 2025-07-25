@@ -44,7 +44,6 @@ const ProgramCard = ({
         className="object-cover w-full h-44 rounded-t-3xl"
         width={400}
         height={176}
-        priority
       />
       <span className={`absolute top-4 left-4 px-4 py-1 rounded-full text-sm font-bold shadow-lg z-10 ${isOpen ? 'bg-green-500/90 text-white' : 'bg-gray-400/80 text-white'}`}>{isOpen ? 'Open' : 'Closed'}</span>
     </div>
