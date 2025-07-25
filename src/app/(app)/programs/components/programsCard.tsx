@@ -54,21 +54,21 @@ const ProgramCard = ({
         alt={artisanName || 'Artisan'}
         width={48}
         height={48}
-        className="w-12 h-12 rounded-full border-2 border-yellow-400 shadow"
+        className="w-12 h-12 rounded-full border-2 border-gray-500"
       />
       <div className="flex flex-col">
         <span className="font-semibold text-base text-gray-800 leading-tight">{artisanName || '-'}</span>
         <span className="text-xs text-gray-500">Artisan</span>
       </div>
     </div>
-    <div className="px-6 pb-6 flex-1 flex flex-col gap-2">
-      <span className="inline-block bg-yellow-100 text-yellow-700 text-xs px-3 py-1 rounded-full font-semibold shadow mb-2 w-fit">{category}</span>
+    <div className="px-6 pb-6 flex-1 flex flex-col">
+      <span className="inline-block bg-[#FF9000] text-white text-xs px-3 py-1 rounded-full font-semibold shadow mb-2 w-fit">{category}</span>
       <h3 className="font-bold text-lg text-gray-900 mb-1 line-clamp-2">{title}</h3>
-      <p className="text-gray-700 text-sm mb-2 line-clamp-3">{description}</p>
+      {/* <p className="text-gray-700 text-sm mb-2 line-clamp-3">{description}</p> */}
       <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs text-gray-600 mb-2">
         <div><b>Duration:</b> {duration}</div>
-        <div><b>Applicants:</b> {applications}</div>
-        <div className="col-span-2"><b>Criteria:</b> {criteria}</div>
+        {/* <div><b>Applicants:</b> {applications}</div> */}
+        {/* <div className="col-span-2"><b>Criteria:</b> {criteria}</div> */}
         <div className="col-span-2"><b>Created:</b> {new Date(createdAt).toLocaleDateString()}</div>
       </div>
       <div className="flex-1" />
@@ -76,7 +76,7 @@ const ProgramCard = ({
         href={isOpen ? `/programs/${id}` : "#"}
         className={`w-full mt-2 py-3 rounded-xl font-bold flex items-center justify-center gap-2 text-base transition-colors duration-200 shadow-md ${
           isOpen
-            ? 'bg-yellow-500 hover:bg-yellow-600 text-white'
+            ? 'bg-[#FF9000] hover:bg-[#E33629] text-white'
             : 'bg-gray-300 text-gray-500 cursor-not-allowed'
         }`}
         tabIndex={isOpen ? 0 : -1}
