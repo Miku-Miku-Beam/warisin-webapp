@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Suspense } from "react";
 import "./globals.css";
+import Navbar from "@/lib/components/Navbar"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Heritage Artisans",
+  title: "Warisin Artisant",
   description: "",
 };
 
@@ -33,6 +34,7 @@ export default function RootLayout({
         <Suspense fallback={null}>
           <ProgressBar />
         </Suspense>
+        <Navbar/>
         {children}
       </body>
     </html>
