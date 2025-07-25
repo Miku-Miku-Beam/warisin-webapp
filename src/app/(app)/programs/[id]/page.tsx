@@ -1,11 +1,19 @@
-import { PrismaClient } from "../../../../../generated";
+import prisma from '@/lib/prisma';
 import ProgramDetail from './components/ProgramDetail';
 
-const prisma = new PrismaClient();
+interface ProgramPageProps {
+  params: Promise<{
+    id: string;
+  }>;
+}
 
-export default async function ProgramPage({ params }: { params: { id: string } }) {
+
+export default async function ProgramPage({ params }: ProgramPageProps) {
+
+  const { id } = await params;
+
   const program = await prisma.program.findUnique({
-    where: { id: params.id },
+    where: { id: id },
     include: {
       artisan: true,
       category: true,
@@ -16,20 +24,21 @@ export default async function ProgramPage({ params }: { params: { id: string } }
     return <div className="max-w-2xl mx-auto py-12 text-red-600">Program not found.</div>;
   }
 
-  // Convert nullable fields to undefined for type safety
   const safeProgram = {
     ...program,
+    location: program.location ?? undefined,
+    programImageUrl: program.programImageUrl ?? undefined,
     artisan: program.artisan
       ? {
-          name: program.artisan.name ?? undefined,
-          bio: program.artisan.bio ?? undefined,
-          profileImageUrl: program.artisan.profileImageUrl ?? undefined,
-        }
+        name: program.artisan.name ?? undefined,
+        bio: program.artisan.bio ?? undefined,
+        profileImageUrl: program.artisan.profileImageUrl ?? undefined,
+      }
       : undefined,
     category: program.category
       ? {
-          name: program.category.name ?? undefined,
-        }
+        name: program.category.name ?? undefined,
+      }
       : undefined,
   };
 

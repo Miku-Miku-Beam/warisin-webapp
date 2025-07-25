@@ -1,10 +1,7 @@
 import { getCurrentCookie } from '@/lib/auth';
 import { repositories } from '@/lib/repository';
 import { redirect } from "next/navigation";
-import { PrismaClient } from "../../../../../../generated";
-import ProfileForm from './ProfileForm';
 
-const prisma = new PrismaClient();
 
 export default async function ProfilePage() {
   const user = await getCurrentCookie();

@@ -1,6 +1,6 @@
+import prisma from '@/lib/prisma';
 import ProgramsList from './components/programsList';
 import ProgramsSearchBar from './components/ProgramsSearchBar';
-import { PrismaClient } from '../../../../generated'; // Pastikan path ini benar
 
 interface ProgramCardProps {
   id: string;
@@ -18,11 +18,15 @@ interface ProgramCardProps {
   artisanName?: string;
 }
 
-const prisma = new PrismaClient();
 
 function getUniqueCategories(events: ProgramCardProps[]) {
   const cats = events.map(e => e.category).filter(Boolean);
   return Array.from(new Set(cats));
+}
+
+export interface ProgramsSearchParams {
+  search?: string;
+  category?: string;
 }
 
 export default async function EventPage({ searchParams }: { searchParams: { [key: string]: string } }) {

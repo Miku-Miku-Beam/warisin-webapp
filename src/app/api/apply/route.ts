@@ -1,8 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "../../../../generated"; // atau '@prisma/client' jika pakai default
 import { getCurrentUser } from "@/lib/auth";
-
-const prisma = new PrismaClient();
+import prisma from "@/lib/prisma";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   const body = await request.json();

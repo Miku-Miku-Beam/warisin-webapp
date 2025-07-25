@@ -1,4 +1,4 @@
-import { PrismaClient } from '../generated';
+import { PrismaClient } from '@prisma/client';
 import { adminAuth } from '../src/lib/firebase/admin';
 
 // Define Role enum locally to match schema
