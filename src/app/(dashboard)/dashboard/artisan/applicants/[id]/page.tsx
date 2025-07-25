@@ -3,7 +3,6 @@ import { repositories } from "@/lib/repository";
 import Image from "next/image";
 import ApplicationActionButtons from "../ApplicationActionButtons";
 
-
 interface ApplicationDetailPageProps {
     params: Promise<{ id: string }>;
 }
