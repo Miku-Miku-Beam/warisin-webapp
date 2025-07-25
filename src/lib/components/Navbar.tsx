@@ -2,6 +2,7 @@ import { getCurrentUser } from '@/lib/auth';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import LogoutButton from './LogoutButton';
+import Image from 'next/image';
 
 // Loading component for Navbar
 const NavbarSkeleton = () => (
@@ -29,8 +30,9 @@ const NavbarContent = async () => {
         return (
             <header className="sticky top-0 z-30 bg-white/90 backdrop-blur border-b border-yellow-100 shadow-sm">
                 <nav className="container mx-auto flex items-center justify-between py-3 px-4">
-                    <Link href="/" className="text-xl md:text-2xl font-bold text-yellow-800 tracking-tight">
-                        HeritageID
+                    <Link href="/" className="flex items-center gap-2 text-xl md:text-2xl font-bold text-yellow-800 tracking-tight">
+                        <Image src="/logo-warisin.svg" alt="Warisin Logo" width={36} height={36} />
+                        Warisin
                     </Link>
 
                     <div className="hidden md:flex gap-6 items-center">
@@ -38,7 +40,7 @@ const NavbarContent = async () => {
                         {!isLoggedIn && (
                             <>
                                 <Link href="#fitur" className="text-gray-700 hover:text-yellow-700 font-medium transition">Fitur</Link>
-                                <Link href="/artisans" className="text-gray-700 hover:text-yellow-700 font-medium transition">Artisan</Link>
+                                <Link href="/artisans" className="text-gray-700 hover:text-yellow-700 font-medium transition">The Artist</Link>
                                 <Link href="#testimoni" className="text-gray-700 hover:text-yellow-700 font-medium transition">Testimoni</Link>
                                 <Link href="/login" className="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-5 rounded-lg shadow transition">Login</Link>
                                 <Link href="/register" className="border border-yellow-600 hover:bg-yellow-50 text-yellow-700 font-bold py-2 px-5 rounded-lg transition">Daftar</Link>
@@ -49,7 +51,7 @@ const NavbarContent = async () => {
                         {isLoggedIn && (
                             <>
                                 {/* Common links for all logged-in users */}
-                                <Link href="/artisans" className="text-gray-700 hover:text-yellow-700 font-medium transition">Artisan</Link>
+                                <Link href="/artisans" className="text-gray-700 hover:text-yellow-700 font-medium transition">The Artist</Link>
                                 <Link href="/programs" className="text-gray-700 hover:text-yellow-700 font-medium transition">Programs</Link>
 
                                 {/* Artisan-specific links */}
@@ -136,10 +138,10 @@ const NavbarContent = async () => {
             <header className="sticky top-0 z-30 bg-white/90 backdrop-blur border-b border-yellow-100 shadow-sm">
                 <nav className="container mx-auto flex items-center justify-between py-3 px-4">
                     <Link href="/" className="text-xl md:text-2xl font-bold text-yellow-800 tracking-tight">
-                        HeritageID
+                        Warisin
                     </Link>
                     <div className="hidden md:flex gap-6 items-center">
-                        <Link href="/artisans" className="text-gray-700 hover:text-yellow-700 font-medium transition">Artisan</Link>
+                        <Link href="/artisans" className="text-gray-700 hover:text-yellow-700 font-medium transition">The Artist</Link>
                         <Link href="/programs" className="text-gray-700 hover:text-yellow-700 font-medium transition">Programs</Link>
                         <Link href="/login" className="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-5 rounded-lg shadow transition">Login</Link>
                     </div>
