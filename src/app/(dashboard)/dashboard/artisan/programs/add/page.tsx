@@ -199,7 +199,6 @@ export default function AddProgramPage() {
     setIsAiAssisting(true);
 
     try {
-      // Get category name for better context
       const selectedCategory = categories.find(
         (cat) => cat.id === formData.categoryId
       );
@@ -334,9 +333,8 @@ export default function AddProgramPage() {
                   placeholder="Enter program title"
                   value={formData.title}
                   onChange={(e) => handleInputChange("title", e.target.value)}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    errors.title ? "border-red-500" : "border-gray-300"
-                  }`}
+                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.title ? "border-red-500" : "border-gray-300"
+                    }`}
                 />
                 {errors.title && (
                   <p className="text-sm text-red-500 mt-1">{errors.title}</p>
@@ -442,9 +440,8 @@ export default function AddProgramPage() {
                   onChange={(e) =>
                     handleInputChange("description", e.target.value)
                   }
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    errors.description ? "border-red-500" : "border-gray-300"
-                  }`}
+                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.description ? "border-red-500" : "border-gray-300"
+                    }`}
                 />
                 {errors.description && (
                   <p className="text-sm text-red-500 mt-1">
@@ -467,9 +464,8 @@ export default function AddProgramPage() {
                   onChange={(e) =>
                     handleInputChange("categoryId", e.target.value)
                   }
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    errors.categoryId ? "border-red-500" : "border-gray-300"
-                  }`}
+                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.categoryId ? "border-red-500" : "border-gray-300"
+                    }`}
                 >
                   <option value="">Select program category</option>
                   {categories.map((category) => (
@@ -502,9 +498,8 @@ export default function AddProgramPage() {
                     onChange={(e) =>
                       handleInputChange("duration", e.target.value)
                     }
-                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.duration ? "border-red-500" : "border-gray-300"
-                    }`}
+                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.duration ? "border-red-500" : "border-gray-300"
+                      }`}
                   />
                   {errors.duration && (
                     <p className="text-sm text-red-500 mt-1">
@@ -528,9 +523,8 @@ export default function AddProgramPage() {
                     onChange={(e) =>
                       handleInputChange("location", e.target.value)
                     }
-                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.location ? "border-red-500" : "border-gray-300"
-                    }`}
+                    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.location ? "border-red-500" : "border-gray-300"
+                      }`}
                   />
                   {errors.location && (
                     <p className="text-sm text-red-500 mt-1">
@@ -556,9 +550,8 @@ export default function AddProgramPage() {
                   onChange={(e) =>
                     handleInputChange("criteria", e.target.value)
                   }
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    errors.criteria ? "border-red-500" : "border-gray-300"
-                  }`}
+                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.criteria ? "border-red-500" : "border-gray-300"
+                    }`}
                 />
                 {errors.criteria && (
                   <p className="text-sm text-red-500 mt-1">{errors.criteria}</p>
@@ -586,9 +579,8 @@ export default function AddProgramPage() {
                   onChange={(e) =>
                     handleInputChange("startDate", e.target.value)
                   }
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    errors.startDate ? "border-red-500" : "border-gray-300"
-                  }`}
+                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.startDate ? "border-red-500" : "border-gray-300"
+                    }`}
                 />
                 {errors.startDate && (
                   <p className="text-sm text-red-500 mt-1">
@@ -610,9 +602,8 @@ export default function AddProgramPage() {
                   id="endDate"
                   value={formData.endDate}
                   onChange={(e) => handleInputChange("endDate", e.target.value)}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    errors.endDate ? "border-red-500" : "border-gray-300"
-                  }`}
+                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.endDate ? "border-red-500" : "border-gray-300"
+                    }`}
                 />
                 {errors.endDate && (
                   <p className="text-sm text-red-500 mt-1">{errors.endDate}</p>
