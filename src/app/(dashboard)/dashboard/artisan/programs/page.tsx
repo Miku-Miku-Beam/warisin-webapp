@@ -1,7 +1,7 @@
 import { repositories } from "@/lib/repository";
 import { cookies } from "next/headers";
-import Link from "next/link";
 import Image from 'next/image';
+import Link from "next/link";
 
 const getProgramsData = async () => {
     const cookieStore = await cookies();
@@ -20,8 +20,6 @@ const getProgramsData = async () => {
         return [];
     }
 
-    console.log(artisanId);
-
     const programs = await repositories.program.getProgramsByArtisan(artisanId);
 
     return programs
@@ -29,8 +27,6 @@ const getProgramsData = async () => {
 
 export default async function ArtisanProgramPage() {
     const programs = await getProgramsData();
-
-    console.log(programs);
 
     return (
         <div className="container mx-auto px-4 py-8">
@@ -179,13 +175,6 @@ export default async function ArtisanProgramPage() {
                                         aria-label={`View details of ${program.title}`}
                                     >
                                         View Details
-                                    </Link>
-                                    <Link
-                                        href={`/dashboard/artisan/programs/${program.id}/edit`}
-                                        className="flex-1 bg-gray-100 text-gray-800 px-4 py-2 rounded-lg text-center text-sm font-semibold shadow hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-400 transition"
-                                        aria-label={`Edit program ${program.title}`}
-                                    >
-                                        Edit Program
                                     </Link>
                                 </div>
                             </div>

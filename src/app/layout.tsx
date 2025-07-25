@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Heritage Artisans",
+  title: "Waris.in",
   description: "",
 };
 
