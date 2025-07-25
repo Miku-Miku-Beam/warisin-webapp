@@ -1,6 +1,6 @@
 import { getCurrentCookie } from "@/lib/auth";
 import { repositories } from "@/lib/repository";
-import ApplicantList from "../../artisan/components/ApplicantList";
+import ApplicantList from "../components/ApplicantList";
 
 const getApplicantions = async () => {
     const cookie = await getCurrentCookie();
