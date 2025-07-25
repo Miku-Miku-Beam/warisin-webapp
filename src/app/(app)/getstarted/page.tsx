@@ -7,8 +7,12 @@ export default async function GetStartedPage() {
   if (!user) {
     redirect('/login/applicant');
   }
-  if (user.onboarded) {
+  // Onboarding dianggap selesai jika sudah punya ApplicantProfile
+  if (user.ApplicantProfile) {
     redirect('/dashboard/applicant');
   }
+  // Perbaiki agar name tidak null
+  if (user.name == null) user.name = '';
+  if (user.location == null) user.location = '';
   return <GetStartedForm user={user} />;
 }
