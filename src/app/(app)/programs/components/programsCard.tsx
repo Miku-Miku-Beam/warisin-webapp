@@ -38,19 +38,18 @@ const ProgramCard = ({
   <div className="bg-white/80 backdrop-blur-lg border border-white/40 shadow-xl hover:shadow-2xl transition-shadow duration-200 rounded-3xl w-full max-w-xs flex flex-col overflow-hidden group">
     {/* Thumbnail & Status badge */}
     <div className="relative w-full">
-      <Image
+      <img
         src={programImageUrl || fallbackProgram}
         alt={title}
         className="object-cover w-full h-44 rounded-t-3xl"
         width={400}
         height={176}
-        priority
       />
       <span className={`absolute top-4 left-4 px-4 py-1 rounded-full text-sm font-bold shadow-lg z-10 ${isOpen ? 'bg-green-500/90 text-white' : 'bg-gray-400/80 text-white'}`}>{isOpen ? 'Open' : 'Closed'}</span>
     </div>
     {/* Artisan avatar dan nama */}
     <div className="flex items-center gap-4 px-6 pt-4 pb-2">
-      <Image
+      <img
         src={artisanAvatar || fallbackAvatar}
         alt={artisanName || 'Artisan'}
         width={48}

@@ -70,11 +70,14 @@ export const uploadFile = async (
             options
         } = params;
 
+        
         const {
             maxSize = 10 * 1024 * 1024, // 10MB default
             allowedTypes = [],
             customFileName
         } = options || {};
+
+        console.log(`Uploading file: ${fileName} to ${storagePath} with MIME type ${mimeType}`);
 
         // Validate file type if specified
         if (allowedTypes.length > 0 && !allowedTypes.includes(mimeType)) {
@@ -114,6 +117,8 @@ export const uploadFile = async (
             action: 'read',
             expires: '03-01-2500' // Long expiry for public files
         });
+
+        console.log(`File uploaded successfully: ${url}`);  
 
         return {
             url,
