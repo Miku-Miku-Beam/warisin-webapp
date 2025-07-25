@@ -1,7 +1,7 @@
 import { getStorage } from 'firebase-admin/storage';
 import { app } from './admin';
 
-const storage = getStorage(app);
+export const storage = getStorage(app);
 
 export interface UploadResult {
     url: string;
@@ -98,7 +98,9 @@ export const uploadFile = async (
         const fullPath = `${storagePath}/${finalFileName}`;
 
         // Create storage reference
-        const fileRef = storage.bucket().file(fullPath);
+        const fileRef = storage.bucket(
+            process.env.FIREBASE_STORAGE_BUCKET
+        ).file(fullPath);
 
         // Upload file with metadata
         await fileRef.save(fileBuffer, {

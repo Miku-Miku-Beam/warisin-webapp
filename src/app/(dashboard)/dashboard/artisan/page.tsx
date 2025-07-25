@@ -2,6 +2,7 @@ import { getCurrentCookie } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import { default as ApplicantList, default as NotificationList } from './components/ApplicantList';
 
 // This page needs dynamic rendering due to cookie usage
 export const dynamic = 'force-dynamic';
@@ -13,10 +14,8 @@ function statusBadge(isOpen: boolean) {
 }
 
 export default async function ArtisanDashboardPage() {
-  // 1. Get current artisan user
   const user = await getCurrentCookie();
 
-  // 2. Fetch programs created by this artisan
   const programs = await prisma.program.findMany({
     where: { artisanId: user.id },
     orderBy: { createdAt: 'desc' },
@@ -29,7 +28,6 @@ export default async function ArtisanDashboardPage() {
     },
   });
 
-  // 3. Fetch latest applicant notifications (applications to artisan's programs)
   const notifications = await prisma.application.findMany({
     where: {
       Program: { artisanId: user.id },
@@ -91,45 +89,28 @@ export default async function ArtisanDashboardPage() {
         <section className="mb-12">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg md:text-xl font-bold text-gray-900">Latest Applicant Notifications</h2>
-            <Link href="/dashboard/artisan/programs/applications" className="text-blue-600 hover:text-blue-800 text-sm font-medium">View All</Link>
+            <Link href="/dashboard/artisan/applicants" className="text-blue-600 hover:text-blue-800 text-sm font-medium">View All</Link>
           </div>
           {notifications.length === 0 ? (
             <div className="bg-white/80 backdrop-blur-md rounded-xl shadow border border-gray-100 p-6 text-center text-gray-500">
               No new applicants yet.
             </div>
           ) : (
-            <div className="space-y-3">
-              {notifications.map((notif) => (
-                <div key={notif.id} className="bg-white/90 backdrop-blur-md border border-yellow-100 rounded-xl p-4 flex items-center justify-between shadow-sm hover:shadow-md transition-all duration-150 group">
-                  <div className="flex items-center gap-3">
-                    <img src={typeof notif.applicant.profileImageUrl === 'string' && notif.applicant.profileImageUrl ? notif.applicant.profileImageUrl : '/default-avatar.png'} alt={notif.applicant.name || 'User'} className="w-full h-full rounded-full border-2 border-yellow-200 object-cover bg-white" />
-                    <div>
-                      <div className="font-semibold text-gray-800 mb-0.5 flex items-center gap-1">
-                        {notif.applicant.name}
-                        <span className="inline-block ml-1 px-2 py-0.5 rounded bg-yellow-50 text-yellow-700 text-xs font-semibold">New Applicant</span>
-                      </div>
-                      <div className="text-sm text-gray-600 mb-0.5">applied to <span className="font-medium text-orange-600">{notif.Program.title}</span></div>
-                      <div className="text-xs text-gray-400">{new Date(notif.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
-                    </div>
-                  </div>
-                  <Link href={`/dashboard/artisan/programs/applications/${notif.id}`} className="text-blue-600 hover:text-blue-800 text-sm font-medium bg-blue-50 px-3 py-1 rounded-lg shadow transition-all duration-150 group-hover:bg-blue-100">
-                    View Application
-                  </Link>
-                </div>
-              ))}
-            </div>
+            <ApplicantList notifications={notifications} />
+// Server component for applicant notification cards
+
           )}
         </section>
 
         {/* Add Program Button */}
-        <div className="mb-10 flex justify-end">
+        {/* <div className="mb-10 flex justify-end">
           <Link href="/dashboard/artisan/programs/add" className="inline-flex items-center px-5 py-2 bg-orange-500 text-white font-semibold rounded-lg shadow hover:bg-orange-600 transition text-base">
             <span className="text-xl mr-2">+</span> Add Program
           </Link>
-        </div>
+        </div> */}
 
         {/* Latest Programs List */}
-        <section className="bg-white/90 backdrop-blur-md rounded-2xl shadow border border-gray-100 p-6">
+        {/* <section className="bg-white/90 backdrop-blur-md rounded-2xl shadow border border-gray-100 p-6">
           <h2 className="text-xl font-bold text-gray-900 mb-4">Latest Programs</h2>
           {programs.length === 0 ? (
             <div className="text-center py-12">
@@ -160,7 +141,7 @@ export default async function ArtisanDashboardPage() {
               ))}
             </div>
           )}
-        </section>
+        </section> */}
       </main>
     </div>
   );

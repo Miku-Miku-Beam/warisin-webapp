@@ -1,7 +1,7 @@
 import { repositories } from "@/lib/repository";
 import { cookies } from "next/headers";
-import Link from "next/link";
 import Image from 'next/image';
+import Link from "next/link";
 
 const getProgramsData = async () => {
     const cookieStore = await cookies();
@@ -20,8 +20,6 @@ const getProgramsData = async () => {
         return [];
     }
 
-    console.log(artisanId);
-
     const programs = await repositories.program.getProgramsByArtisan(artisanId);
 
     return programs
@@ -29,8 +27,6 @@ const getProgramsData = async () => {
 
 export default async function ArtisanProgramPage() {
     const programs = await getProgramsData();
-
-    console.log(programs);
 
     return (
         <div className="container mx-auto px-4 py-8">

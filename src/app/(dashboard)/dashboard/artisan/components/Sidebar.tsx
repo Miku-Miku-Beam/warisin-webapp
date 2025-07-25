@@ -1,5 +1,6 @@
 import { getCurrentUser } from '@/lib/auth';
 import LogoutButton from '@/lib/components/LogoutButton';
+import { DEFAULT_PFP } from '@/lib/static';
 import ActiveLink from './ActiveLink';
 
 const menu = [
@@ -44,7 +45,7 @@ const Sidebar = async () => {
       <div className="mt-auto pt-8 border-t border-orange-100">
         <div className="flex items-center gap-3 mb-3">
           <img
-            src={user.profileImageUrl ?? "/default-avatar.png"}
+            src={user.profileImageUrl && user.profileImageUrl !== '' && user.profileImageUrl !== null ? user.profileImageUrl : DEFAULT_PFP}
             alt="Avatar"
             className="w-10 h-10 rounded-full border-2 border-orange-200 object-cover bg-white"
           />
