@@ -32,15 +32,36 @@ export default function Login() {
             if (response.ok) {
                 const data = await response.json();
                 console.log('User logged in successfully:', data);
-                // Redirect to dashboard
                 window.location.href = '/';
             } else {
                 console.log(response);
                 throw new Error('Error logging in');
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error signing in with Google:', error);
-            alert(error instanceof Error ? error.message : 'An error occurred');
+            
+            // Handle specific Firebase errors
+            let errorMessage = 'An error occurred while signing in';
+            if (error.code) {
+                switch (error.code) {
+                    case 'auth/network-request-failed':
+                        errorMessage = 'Network error. Please check your internet connection and Firebase configuration.';
+                        break;
+                    case 'auth/popup-closed-by-user':
+                        errorMessage = 'Sign-in was cancelled.';
+                        break;
+                    case 'auth/popup-blocked':
+                        errorMessage = 'Popup was blocked by browser. Please allow popups for this site.';
+                        break;
+                    case 'auth/cancelled-popup-request':
+                        errorMessage = 'Another sign-in process is already in progress.';
+                        break;
+                    default:
+                        errorMessage = `Authentication error: ${error.message}`;
+                }
+            }
+            
+            alert(errorMessage);
         } finally {
             setLoading(false);
         }
@@ -74,15 +95,42 @@ export default function Login() {
             if (response.ok) {
                 const data = await response.json();
                 console.log('User logged in successfully:', data);
-                // Redirect to dashboard
                 window.location.href = '/';
             } else {
                 console.log(response);
                 throw new Error('Error logging in');
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error with email login:', error);
-            alert(error instanceof Error ? error.message : 'An error occurred');
+            
+            // Handle specific Firebase errors
+            let errorMessage = 'An error occurred while signing in';
+            if (error.code) {
+                switch (error.code) {
+                    case 'auth/network-request-failed':
+                        errorMessage = 'Network error. Please check your internet connection and try again.';
+                        break;
+                    case 'auth/user-not-found':
+                        errorMessage = 'No account found with this email address.';
+                        break;
+                    case 'auth/wrong-password':
+                        errorMessage = 'Incorrect password. Please try again.';
+                        break;
+                    case 'auth/invalid-email':
+                        errorMessage = 'Invalid email address format.';
+                        break;
+                    case 'auth/user-disabled':
+                        errorMessage = 'This account has been disabled.';
+                        break;
+                    case 'auth/too-many-requests':
+                        errorMessage = 'Too many failed attempts. Please try again later.';
+                        break;
+                    default:
+                        errorMessage = `Authentication error: ${error.message}`;
+                }
+            }
+            
+            alert(errorMessage);
         } finally {
             setLoading(false);
         }

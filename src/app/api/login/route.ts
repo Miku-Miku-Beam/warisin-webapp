@@ -5,6 +5,7 @@ import { NextRequest } from 'next/server';
 
 export async function POST(request: NextRequest) {
     try {
+        console.log("Login API called");
         const headersList = await headers()
         const authHeader = headersList.get('Authorization')
 

@@ -1,3 +1,4 @@
+import ProgressBar from "@/lib/components/ProgressBar";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -23,11 +24,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id" className={`${geistSans.variable} ${geistMono.variable}`}> 
+    <html lang="id" className={`${geistSans.variable} ${geistMono.variable}`}>
       <head>
         <meta charSet="utf-8" />
       </head>
       <body className="font-sans text-gray-800 min-h-screen">
+        <ProgressBar />
         {children}
       </body>
     </html>

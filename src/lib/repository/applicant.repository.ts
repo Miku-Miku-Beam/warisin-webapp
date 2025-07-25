@@ -11,6 +11,7 @@ interface IUpdateApplicantProfileData {
     background?: string;
     interests?: string;
     portfolioUrl?: string;
+    cvFileUrl?: string; // Optional field for CV file URL
 }
 
 interface IApplicantApplicationData {
@@ -121,7 +122,8 @@ const applicantRepository: IApplicantRepository = {
             data: {
                 ...(data.background && { background: data.background }),
                 ...(data.interests && { interests: data.interests }),
-                ...(data.portfolioUrl !== undefined && { portfolioUrl: data.portfolioUrl })
+                ...(data.portfolioUrl !== undefined && { portfolioUrl: data.portfolioUrl }),
+                ...(data.cvFileUrl !== undefined && { cvFileUrl: data.cvFileUrl })
             },
             include: {
                 user: {
