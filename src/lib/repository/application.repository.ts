@@ -5,7 +5,7 @@ interface ICreateApplicationData {
     applicantId: string;
     message: string;
     motivation?: string;
-    cvFileUrl?: string; 
+    cvFileUrl?: string;
 }
 
 interface IUpdateApplicationData {
@@ -247,9 +247,9 @@ const applicationRepository: IApplicationRepository = {
             }
         });
 
-        if (existingApplication) {
-            throw new Error('Application already exists for this program');
-        }
+        // if (existingApplication) {
+        //     throw new Error('Application already exists for this program');
+        // }
 
         return await prisma.application.create({
             data: {
@@ -281,7 +281,7 @@ const applicationRepository: IApplicationRepository = {
             }
         }) as unknown as ApplicationWithDetails;
 
-        
+
     },
 
     async updateApplication(id: string, data: IUpdateApplicationData): Promise<ApplicationWithDetails> {
@@ -290,7 +290,8 @@ const applicationRepository: IApplicationRepository = {
             data: {
                 ...(data.status && { status: data.status }),
                 ...(data.message && { message: data.message }),
-                ...(data.motivation && { motivation: data.motivation })
+                ...(data.motivation && { motivation: data.motivation }),
+                ...(data.cvUrl && { cvUrl: data.cvUrl })
             },
             include: {
                 Program: {

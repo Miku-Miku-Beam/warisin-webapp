@@ -5,7 +5,7 @@ import ActiveLink from './ActiveLink';
 const menu = [
   { href: "/dashboard/artisan", label: "Overview", icon: "🏠" },
   { href: "/dashboard/artisan/programs", label: "My Programs", icon: "📋" },
-  { href: "/dashboard/artisan/applications", label: "Applications", icon: "📝" },
+  { href: "/dashboard/artisan/applicants", label: "Applications", icon: "📝" },
   { href: "/dashboard/artisan/profile", label: "Edit Profile", icon: "👤" },
 ];
 

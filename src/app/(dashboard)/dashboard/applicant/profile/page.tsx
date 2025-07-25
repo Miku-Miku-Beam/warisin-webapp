@@ -12,8 +12,6 @@ export default async function ProfilePage() {
 
   const userData = await repositories.applicant.getApplicantById(user.userId);
 
-
-
   return (
     <div className="flex min-h-screen">
       {/* Main Profile Content */}

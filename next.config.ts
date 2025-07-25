@@ -30,6 +30,7 @@ const nextConfig: NextConfig = {
     domains: [
       'www.lemocovuxypy.us',
       'www.nedabyvyqoz.tv',
+      'www.bamybymuseribib.info',
     ],
   },
 };
