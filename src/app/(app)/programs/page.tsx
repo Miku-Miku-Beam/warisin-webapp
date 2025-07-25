@@ -47,6 +47,7 @@ export default async function EventPage({ searchParams }: { searchParams: Promis
       },
       orderBy: { createdAt: 'desc' },
       where: {
+        isOpen: true,
         ...(search
           ? {
               OR: [
