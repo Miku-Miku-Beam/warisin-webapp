@@ -34,7 +34,7 @@ const ApplicationActionButtons: React.FC<ApplicationActionButtonsProps> = ({ app
 
     return (
         <>
-            <div className="flex justify-end gap-4 mt-8">
+            <div className="flex justify-end gap-4 mt-8 fixed">
                 <button
                     className="bg-green-500 text-white px-6 py-2 rounded"
                     onClick={() => setShowModal("approve")}
@@ -52,24 +52,26 @@ const ApplicationActionButtons: React.FC<ApplicationActionButtonsProps> = ({ app
             </div>
             {showModal && (
                 <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-lg shadow-lg p-6 min-w-[300px]">
-                        <h3 className="text-lg font-bold mb-4">Konfirmasi</h3>
-                        <p className="mb-6">Yakin ingin {showModal === "approve" ? "menyetujui" : "menolak"} aplikasi ini?</p>
-                        <div className="flex justify-end gap-2">
-                            <button
-                                className="px-4 py-2 rounded bg-gray-200 text-gray-700"
-                                onClick={() => setShowModal(null)}
-                                disabled={loading}
-                            >
-                                Batal
-                            </button>
-                            <button
-                                className={`px-4 py-2 rounded text-white ${showModal === "approve" ? "bg-green-500" : "bg-red-500"}`}
-                                onClick={() => handleAction(showModal)}
-                                disabled={loading}
-                            >
-                                {loading ? "Memproses..." : "Ya, Lanjutkan"}
-                            </button>
+                    <div className="bg-white w-full h-full flex flex-col items-center justify-center rounded-none shadow-none p-0">
+                        <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-6">
+                            <h3 className="text-lg font-bold mb-4">Konfirmasi</h3>
+                            <p className="mb-6">Yakin ingin {showModal === "approve" ? "menyetujui" : "menolak"} aplikasi ini?</p>
+                            <div className="flex justify-end gap-2">
+                                <button
+                                    className="px-4 py-2 rounded bg-gray-200 text-gray-700"
+                                    onClick={() => setShowModal(null)}
+                                    disabled={loading}
+                                >
+                                    Batal
+                                </button>
+                                <button
+                                    className={`px-4 py-2 rounded text-white ${showModal === "approve" ? "bg-green-500" : "bg-red-500"}`}
+                                    onClick={() => handleAction(showModal)}
+                                    disabled={loading}
+                                >
+                                    {loading ? "Memproses..." : "Ya, Lanjutkan"}
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
