@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "bun generate && next build --no-lint",
+    "build": "bun generate:prod && next build --no-lint",
     "start": "next start",
     "generate": "prisma generate",
+    "generate:prod" : "prisma generate --no-engine",
     "db:seed": "tsx prisma/seed.ts",
     "db:migrate": "prisma migrate dev",
     "db:reset": "prisma migrate reset --force && npm run db:seed",
