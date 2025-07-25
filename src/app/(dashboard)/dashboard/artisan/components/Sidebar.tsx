@@ -1,6 +1,7 @@
 import { getCurrentUser } from '@/lib/auth';
 import LogoutButton from '@/lib/components/LogoutButton';
 import { DEFAULT_PFP } from '@/lib/static';
+import Link from 'next/link';
 import ActiveLink from './ActiveLink';
 
 const menu = [
@@ -18,9 +19,14 @@ const Sidebar = async () => {
     <aside className="w-full md:w-64 min-h-screen bg-white/80 backdrop-blur-md border-r border-orange-100 px-4 md:px-6 py-6 flex flex-col rounded-r-3xl shadow-xl fixed md:static z-40">
       {/* Header */}
       <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between">
-        <h2 className="text-xl font-extrabold text-orange-700 mb-4 md:mb-0 tracking-tight">
-          Artisan Dashboard
-        </h2>
+        <div className="flex items-center gap-3">
+          <Link href="/" className="block w-fit">
+            <div className='flex gap-2 items-center'>
+              <img src="/logo.svg" alt="Logo" className="h-10 w-auto mb-4 md:mb-0" />
+              <span className="text-2xl font-extrabold text-orange-700 tracking-tight mb-4 md:mb-0">Waris.in</span>
+            </div>
+          </Link>
+        </div>
       </div>
       {/* Navigation */}
       <nav className="flex flex-col gap-2 flex-1">

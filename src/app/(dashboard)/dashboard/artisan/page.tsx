@@ -1,7 +1,6 @@
 import { getCurrentCookie } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
 import { default as ApplicantList, default as NotificationList } from './components/ApplicantList';
 
 // This page needs dynamic rendering due to cookie usage
@@ -37,6 +36,7 @@ export default async function ArtisanDashboardPage() {
     select: {
       id: true,
       createdAt: true,
+      status: true, // Add status field
       applicant: {
         select: {
           name: true,

@@ -176,13 +176,6 @@ export default async function ArtisanProgramPage() {
                                     >
                                         View Details
                                     </Link>
-                                    <Link
-                                        href={`/dashboard/artisan/programs/${program.id}/edit`}
-                                        className="flex-1 bg-gray-100 text-gray-800 px-4 py-2 rounded-lg text-center text-sm font-semibold shadow hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-400 transition"
-                                        aria-label={`Edit program ${program.title}`}
-                                    >
-                                        Edit Program
-                                    </Link>
                                 </div>
                             </div>
                         </div>

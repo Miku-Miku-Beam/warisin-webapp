@@ -54,6 +54,7 @@ export default function AddProgramForm({ userId }: IAddProgramFormProps) {
     const [aiPrompt, setAiPrompt] = useState("");
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [imageUrl, setImageUrl] = useState<string>("");
+    const [isImageUploading, setIsImageUploading] = useState(false);
 
     // Load categories on component mount
     useEffect(() => {
@@ -328,6 +329,40 @@ export default function AddProgramForm({ userId }: IAddProgramFormProps) {
                     <div className="bg-white rounded-lg shadow-md p-6">
                         <h2 className="text-xl font-semibold mb-4">Basic Information</h2>
                         <div className="space-y-6">
+                              <div>
+                                <label
+                                    htmlFor="programImageFile"
+                                    className="block text-sm font-medium text-gray-700 mb-2"
+                                >
+                                    Program Image <span className="text-red-500">*</span>
+                                </label>
+                                <UploadButton
+                                    endpoint="imageUploader"
+                                    onClientUploadComplete={(res) => {
+                                        setIsImageUploading(false);
+                                        if (res && res[0]?.ufsUrl) {
+                                            setImageUrl(res[0].ufsUrl);
+                                            setFormData((prev) => ({ ...prev, programImageUrl: res[0].ufsUrl }));
+                                        }
+                                    }}
+                                    onUploadError={(error: Error) => {
+                                        setIsImageUploading(false);
+                                        alert(`ERROR! ${error.message}`);
+                                    }}
+                                    className="bg-amber-500 text-white px-3 py-1 rounded shadow hover:bg-amber-600 transition font-semibold text-sm max-w-fit"
+                                />
+                                {isImageUploading && (
+                                    <div className="mt-2 flex items-center gap-2 text-blue-600">
+                                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+                                        <span>Uploading image...</span>
+                                    </div>
+                                )}
+                                {(imageUrl || formData.programImageUrl) && (
+                                    <div className="mt-2">
+                                        <img src={imageUrl || formData.programImageUrl} alt="Program" className="max-h-40 rounded shadow" />
+                                    </div>
+                                )}
+                            </div>
                             {/* Title */}
                             <div>
                                 <label
@@ -622,39 +657,12 @@ export default function AddProgramForm({ userId }: IAddProgramFormProps) {
                     </div>
 
                     {/* Media */}
-                    <div className="bg-white rounded-lg shadow-md p-6">
+                    {/* <div className="bg-white rounded-lg shadow-md p-6">
                         <h2 className="text-xl font-semibold mb-4">Program Media</h2>
                         <p className="text-gray-600 mb-4">
                             Add images and videos for your program (optional)
                         </p>
                         <div className="space-y-6">
-                            {/* Program Image */}
-                            <div>
-                                <label
-                                    htmlFor="programImageFile"
-                                    className="block text-sm font-medium text-gray-700 mb-2"
-                                >
-                                    Program Image <span className="text-red-500">*</span>
-                                </label>
-                                <UploadButton
-                                    endpoint="imageUploader"
-                                    onClientUploadComplete={(res) => {
-                                        console.log("Files: ", res);
-                                        alert("Upload Completed");
-                                        setImageUrl(res[0].ufsUrl);
-                                    }}
-                                    onUploadError={(error: Error) => {
-                                        alert(`ERROR! ${error.message}`);
-                                    }}
-                                />
-                                {formData.programImageUrl && (
-                                    <div className="mt-2">
-                                        <img src={formData.programImageUrl} alt="Program" className="max-h-40 rounded" />
-                                    </div>
-                                )}
-                            </div>
-
-                            {/* Video URL */}
                             <div>
                                 <label
                                     htmlFor="videoUrl"
@@ -674,7 +682,6 @@ export default function AddProgramForm({ userId }: IAddProgramFormProps) {
                                 />
                             </div>
 
-                            {/* Video Thumbnail */}
                             <div>
                                 <label
                                     htmlFor="videoThumbnailUrl"
@@ -694,10 +701,10 @@ export default function AddProgramForm({ userId }: IAddProgramFormProps) {
                                 />
                             </div>
                         </div>
-                    </div>
+                    </div> */}
 
                     {/* Settings */}
-                    <div className="bg-white rounded-lg shadow-md p-6">
+                    {/* <div className="bg-white rounded-lg shadow-md p-6">
                         <h2 className="text-xl font-semibold mb-4">Program Settings</h2>
                         <div className="flex items-center space-x-3">
                             <input
@@ -717,7 +724,7 @@ export default function AddProgramForm({ userId }: IAddProgramFormProps) {
                         <p className="text-sm text-gray-500 mt-2 ml-7">
                             If disabled, participants cannot register for this program
                         </p>
-                    </div>
+                    </div> */}
 
                     {/* Action Buttons */}
                     <div className="flex flex-col sm:flex-row gap-4 pt-6">

@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import Image from "next/image";
 import ModalApplyForm from "./ModalApplyForm";
 
 interface ProgramDetailProps {
@@ -34,12 +33,10 @@ const ProgramDetail = ({ program }: ProgramDetailProps) => {
     <div className="max-w-3xl mx-auto mt-8">
       {/* Program Image */}
       <div className="relative w-full h-56 md:h-72 rounded-t-2xl overflow-hidden shadow-lg">
-        <Image
+        <img
           src={imgSrc}
           alt={program.title}
-          fill
           className="object-cover w-full h-full"
-          priority
           onError={() => setImgSrc(fallbackProgram)}
         />
       </div>
@@ -47,7 +44,7 @@ const ProgramDetail = ({ program }: ProgramDetailProps) => {
       <div className="bg-white/80 rounded-b-2xl shadow-xl p-8 flex flex-col relative">
         {/* Header & Artisan */}
         <div className="flex flex-col md:flex-row md:items-center gap-6 mb-6">
-          <Image
+          <img
             src={program.artisan?.profileImageUrl || "/default-avatar.png"}
             alt={program.artisan?.name || "Artisan"}
             width={80}

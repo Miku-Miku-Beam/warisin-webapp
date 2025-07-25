@@ -37,13 +37,21 @@ const ApplicationDetailPage = async ({ params }: ApplicationDetailPageProps) => 
                     height={80}
                     className="w-20 h-20 rounded-full border-2 border-yellow-200 object-cover bg-white"
                 />
-                <div>
-                    <div className="font-semibold text-gray-800 mb-1 flex items-center gap-2 text-lg">
-                        {applicant.name}
-                        <span className="inline-block ml-2 px-3 py-1 rounded bg-yellow-50 text-yellow-700 text-sm font-semibold">Applicant</span>
+                <div className="flex-1 flex items-center justify-between">
+                    <div>
+                        <div className="font-semibold text-gray-800 mb-1 flex items-center gap-2 text-lg">
+                            {applicant.name}
+                            <span className="inline-block ml-2 px-3 py-1 rounded bg-yellow-50 text-yellow-700 text-sm font-semibold">Applicant</span>
+                        </div>
+                        <p className="text-gray-600">{applicant.email}</p>
+                        {applicant.location && <p className="text-gray-500">Location: {applicant.location}</p>}
                     </div>
-                    <p className="text-gray-600">{applicant.email}</p>
-                    {applicant.location && <p className="text-gray-500">Location: {applicant.location}</p>}
+                    <a
+                        href={`/dashboard/artisan/applicants/profile/${applicant.id}`}
+                        className="text-blue-600 hover:text-blue-800 text-sm font-medium underline ml-4"
+                    >
+                        View Profile
+                    </a>
                 </div>
             </div>
             <div className="mb-6">
@@ -55,7 +63,7 @@ const ApplicationDetailPage = async ({ params }: ApplicationDetailPageProps) => 
                 </div>
             </div>
             <div className="mb-4">
-                <StatusChip status={status} />
+                    <StatusChip status={status} />
             </div>
             <div className="mb-4">
                 <h4 className="font-semibold mb-1">Application Message</h4>
@@ -88,14 +96,6 @@ const ApplicationDetailPage = async ({ params }: ApplicationDetailPageProps) => 
 
             <div className="flex gap-3 mt-6">
                 <ApplicationActionButtons applicationId={application.id} status={status} />
-                <a
-                    href="https://wa.me/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-green-600 hover:text-green-800 text-sm font-medium bg-green-50 px-4 py-2 rounded-xl shadow transition-all duration-150"
-                >
-                    Hubungi
-                </a>
             </div>
         </div>
     );
