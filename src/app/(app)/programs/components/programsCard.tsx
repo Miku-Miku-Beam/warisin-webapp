@@ -1,4 +1,4 @@
-import Image from "next/image";
+
 import Link from "next/link";
 
 interface ProgramCardProps {
@@ -38,7 +38,7 @@ const ProgramCard = ({
   <div className="bg-white/80 backdrop-blur-lg border border-white/40 shadow-xl hover:shadow-2xl transition-shadow duration-200 rounded-3xl w-full max-w-xs flex flex-col overflow-hidden group">
     {/* Thumbnail & Status badge */}
     <div className="relative w-full">
-      <Image
+      <img
         src={programImageUrl || fallbackProgram}
         alt={title}
         className="object-cover w-full h-44 rounded-t-3xl"
@@ -50,7 +50,7 @@ const ProgramCard = ({
     </div>
     {/* Artisan avatar dan nama */}
     <div className="flex items-center gap-4 px-6 pt-4 pb-2">
-      <Image
+      <img
         src={artisanAvatar || fallbackAvatar}
         alt={artisanName || 'Artisan'}
         width={48}
