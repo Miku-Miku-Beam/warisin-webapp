@@ -5,12 +5,14 @@ interface ICreateApplicationData {
     applicantId: string;
     message: string;
     motivation?: string;
+    cvFileUrl?: string; 
 }
 
 interface IUpdateApplicationData {
     status?: 'PENDING' | 'APPROVED' | 'REJECTED' | 'COMPLETED';
     message?: string;
     motivation?: string;
+    cvUrl?: string;
 }
 
 // Type definitions for better auto-completion
@@ -117,18 +119,18 @@ interface IApplicationRepository {
     createApplication(data: ICreateApplicationData): Promise<ApplicationWithDetails>;
     updateApplication(id: string, data: IUpdateApplicationData): Promise<ApplicationWithDetails>;
     deleteApplication(id: string): Promise<void>;
-    
+
     // Status management
     approveApplication(id: string): Promise<ApplicationWithDetails>;
     rejectApplication(id: string, reason?: string): Promise<ApplicationWithDetails>;
     completeApplication(id: string): Promise<ApplicationWithDetails>;
-    
+
     // Query methods
     getApplicationsByProgram(programId: string): Promise<ApplicationWithDetails[]>;
     getApplicationsByApplicant(applicantId: string): Promise<ApplicationWithDetails[]>;
     getApplicationsByArtisan(artisanId: string): Promise<ApplicationWithDetails[]>;
     getApplicationsByStatus(status: string): Promise<ApplicationWithDetails[]>;
-    
+
     // Statistics
     getApplicationStats(): Promise<ApplicationStats>;
     getApplicationStatsByProgram(programId: string): Promise<ProgramApplicationStats>;
@@ -225,7 +227,6 @@ const applicationRepository: IApplicationRepository = {
     },
 
     async createApplication(data: ICreateApplicationData): Promise<ApplicationWithDetails> {
-        // Check if program exists and is open
         const program = await prisma.program.findUnique({
             where: { id: data.ProgramId }
         });
@@ -279,6 +280,8 @@ const applicationRepository: IApplicationRepository = {
                 }
             }
         }) as unknown as ApplicationWithDetails;
+
+        
     },
 
     async updateApplication(id: string, data: IUpdateApplicationData): Promise<ApplicationWithDetails> {
@@ -324,7 +327,7 @@ const applicationRepository: IApplicationRepository = {
     },
 
     async rejectApplication(id: string, reason?: string) {
-        return await this.updateApplication(id, { 
+        return await this.updateApplication(id, {
             status: 'REJECTED'
         });
     },
@@ -521,7 +524,7 @@ const applicationRepository: IApplicationRepository = {
     // Statistics
     async getApplicationStats(): Promise<ApplicationStats> {
         const totalApplications = await prisma.application.count();
-        
+
         const statusStats = await prisma.application.groupBy({
             by: ['status'],
             _count: {
@@ -531,7 +534,7 @@ const applicationRepository: IApplicationRepository = {
 
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-        
+
         const recentApplications = await prisma.application.count({
             where: {
                 createdAt: {
@@ -824,7 +827,7 @@ export const applicationUtils = {
     // Get conversion funnel for applications
     async getApplicationFunnel(timeframe: 'week' | 'month' | 'year' = 'month') {
         let startDate = new Date();
-        
+
         switch (timeframe) {
             case 'week':
                 startDate.setDate(startDate.getDate() - 7);
@@ -898,7 +901,7 @@ export const applicationUtils = {
 
         const categoryStats = applications.reduce((acc, app) => {
             const categoryName = app.Program.category.name;
-            
+
             if (!acc[categoryName]) {
                 acc[categoryName] = {
                     total: 0,
@@ -906,11 +909,11 @@ export const applicationUtils = {
                     approved: 0
                 };
             }
-            
+
             acc[categoryName].total++;
             if (app.status === 'COMPLETED') acc[categoryName].completed++;
             if (app.status === 'APPROVED') acc[categoryName].approved++;
-            
+
             return acc;
         }, {} as Record<string, { total: number; completed: number; approved: number }>);
 
@@ -920,5 +923,27 @@ export const applicationUtils = {
             completionRate: stats.total > 0 ? Math.round((stats.completed / stats.total) * 100) : 0,
             approvalRate: stats.total > 0 ? Math.round((stats.approved / stats.total) * 100) : 0
         }));
+    },
+    async validateCVFile(file: File): Promise<{ isValid: boolean; errors: string[] }> {
+        const errors: string[] = [];
+
+        const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+        if (!allowedTypes.includes(file.type)) {
+            errors.push('File must be PDF or Word document (.pdf, .doc, .docx)');
+        }
+
+        const maxSize = 10 * 1024 * 1024;
+        if (file.size > maxSize) {
+            errors.push('File size must be less than 5MB');
+        }
+
+        if (file.name.length > 100) {
+            errors.push('File name is too long');
+        }
+
+        return {
+            isValid: errors.length === 0,
+            errors
+        };
     }
 };

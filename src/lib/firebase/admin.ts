@@ -4,7 +4,7 @@ import { getAuth } from 'firebase-admin/auth';
 
 // Check if a Firebase Admin app already exists
 const existingApps = getApps();
-const app = existingApps.length > 0 
+export const app = existingApps.length > 0 
     ? existingApps[0] 
     : initializeApp({
         credential: cert({
