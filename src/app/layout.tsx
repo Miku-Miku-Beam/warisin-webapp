@@ -34,7 +34,6 @@ export default function RootLayout({
         <Suspense fallback={null}>
           <ProgressBar />
         </Suspense>
-        <Navbar/>
         {children}
       </body>
     </html>

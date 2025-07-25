@@ -1,3 +1,4 @@
+'use client'
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 
@@ -18,7 +19,7 @@ export default function CallToActionSection() {
           viewport={{ once: true }}
           transition={{ delay: 0.2, duration: 0.5 }}
         >
-          <Link href="/apply" className="bg-gradient-to-r from-[#ff8800] to-[#ff4d00] hover:from-[#ff4d00] hover:to-[#ff8800] text-white font-bold px-8 py-3 rounded-full text-lg shadow-lg transition-all duration-150">
+          <Link href="/programs" className="bg-gradient-to-r from-[#ff8800] to-[#ff4d00] hover:from-[#ff4d00] hover:to-[#ff8800] text-white font-bold px-8 py-3 rounded-full text-lg shadow-lg transition-all duration-150">
             Apply Now
           </Link>
         </motion.div>
