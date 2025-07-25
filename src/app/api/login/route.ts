@@ -74,6 +74,8 @@ export async function POST(request: NextRequest) {
                     return Response.json({ 
                         message: 'User logged in successfully', 
                         user: existingUser, 
+                        onboarded: !!existingUser.ApplicantProfile || !!existingUser.ArtisanProfile,
+                        isNewUser: false,
                         status: 200 
                     });
                 } catch (error) {
@@ -137,6 +139,8 @@ export async function POST(request: NextRequest) {
                 return Response.json({ 
                     message: 'User created and logged in successfully', 
                     user: newUser, 
+                    onboarded: false,
+                    isNewUser: true,
                     status: 201 
                 });
             } catch (error) {

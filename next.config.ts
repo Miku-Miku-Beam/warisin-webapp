@@ -22,6 +22,10 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
     ],
+    domains: [
+      'www.lemocovuxypy.us',
+      'www.nedabyvyqoz.tv',
+    ],
   },
 };
 
