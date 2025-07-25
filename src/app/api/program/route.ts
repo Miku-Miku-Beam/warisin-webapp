@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
 
         if (!sessionValue) {
             console.error('Session not found in cookies');
-            return [];
+            return Response.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
         const { userId: artisanId } = JSON.parse(sessionValue);

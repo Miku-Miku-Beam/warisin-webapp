@@ -1,7 +1,10 @@
-import Link from 'next/link';
 import { getCurrentCookie } from '@/lib/auth';
 import prisma from '@/lib/prisma';
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
+
+// This page needs dynamic rendering due to cookie usage
+export const dynamic = 'force-dynamic';
 
 function statusBadge(isOpen: boolean) {
   return isOpen
@@ -99,7 +102,7 @@ export default async function ArtisanDashboardPage() {
               {notifications.map((notif) => (
                 <div key={notif.id} className="bg-white/90 backdrop-blur-md border border-yellow-100 rounded-xl p-4 flex items-center justify-between shadow-sm hover:shadow-md transition-all duration-150 group">
                   <div className="flex items-center gap-3">
-                    <img src={typeof notif.applicant.profileImageUrl === 'string' && notif.applicant.profileImageUrl ? notif.applicant.profileImageUrl : '/default-avatar.png'} alt={notif.applicant.name} className="w-10 h-10 rounded-full border-2 border-yellow-200 object-cover bg-white" />
+                    <img src={typeof notif.applicant.profileImageUrl === 'string' && notif.applicant.profileImageUrl ? notif.applicant.profileImageUrl : '/default-avatar.png'} alt={notif.applicant.name || 'User'} className="w-10 h-10 rounded-full border-2 border-yellow-200 object-cover bg-white" />
                     <div>
                       <div className="font-semibold text-gray-800 mb-0.5 flex items-center gap-1">
                         {notif.applicant.name}

@@ -3,12 +3,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-interface ArtisanProfilePageProps {
-    params: Promise<{
-        id: string;
-    }>;
-}
-
 async function getArtisanProfile(id: string) {
     try {
         const artisan = await prisma.user.findUnique({
@@ -38,6 +32,14 @@ async function getArtisanProfile(id: string) {
         return null;
     }
 }
+
+
+interface ArtisanProfilePageProps {
+    params: Promise<{
+        id: string;
+    }>;
+}
+
 
 export default async function ArtisanProfilePage({ params }: ArtisanProfilePageProps) {
     const { id } = await params;

@@ -1,4 +1,4 @@
-const LatestApplications = ({ applications }) => (
+const LatestApplications = ({ applications }: { applications: any[] }) => (
     <div>
       <h2 className="text-xl font-semibold mb-2">Your Latest Applications</h2>
       {applications.length === 0 ? (

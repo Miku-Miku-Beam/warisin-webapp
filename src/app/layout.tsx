@@ -1,6 +1,7 @@
 import ProgressBar from "@/lib/components/ProgressBar";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Suspense } from "react";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -29,7 +30,9 @@ export default function RootLayout({
         <meta charSet="utf-8" />
       </head>
       <body className="font-sans text-gray-800 min-h-screen">
-        <ProgressBar />
+        <Suspense fallback={null}>
+          <ProgressBar />
+        </Suspense>
         {children}
       </body>
     </html>

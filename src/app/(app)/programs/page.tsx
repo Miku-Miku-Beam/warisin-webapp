@@ -1,4 +1,5 @@
 import prisma from '@/lib/prisma';
+import { Suspense } from 'react';
 import ProgramsList from './components/programsList';
 import ProgramsSearchBar from './components/ProgramsSearchBar';
 
@@ -29,11 +30,14 @@ export interface ProgramsSearchParams {
   category?: string;
 }
 
-export default async function EventPage({ searchParams }: { searchParams: { [key: string]: string } }) {
+export default async function EventPage({ searchParams }: { searchParams: Promise<ProgramsSearchParams> }) {
   let events: ProgramCardProps[] = [];
   let error: unknown = null;
-  const search = searchParams?.search || '';
-  const category = searchParams?.category || 'All Program';
+
+  const { search: searchParam, category: categoryParam } = await searchParams;
+  
+  const search = searchParam || '';
+  const category = categoryParam || 'All Program';
   try {
     const dbEvents = await prisma.program.findMany({
       include: {
@@ -83,7 +87,16 @@ export default async function EventPage({ searchParams }: { searchParams: { [key
   }
   return (
     <main className="container mx-auto px-4 py-8">
-      <ProgramsSearchBar search={search} category={category} categories={categories} />
+      <Suspense fallback={
+        <div className="flex flex-col sm:flex-row items-center gap-4 mb-6 bg-white/60 backdrop-blur-md border border-white/30 shadow-lg rounded-2xl p-4">
+          <div className="relative flex-1 w-full">
+            <div className="pl-10 pr-10 border border-gray-200 rounded-lg px-4 py-2 w-full h-10 animate-pulse bg-gray-200"></div>
+          </div>
+          <div className="border border-gray-200 rounded-lg px-3 py-2 w-32 h-10 animate-pulse bg-gray-200"></div>
+        </div>
+      }>
+        <ProgramsSearchBar search={search} category={category} categories={categories} />
+      </Suspense>
       <ProgramsList events={events} />
     </main>
   );

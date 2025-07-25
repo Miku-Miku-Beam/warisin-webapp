@@ -1,4 +1,4 @@
-const StatCard = ({ totalApplied }) => (
+const StatCard = ({ totalApplied }: { totalApplied: number }) => (
     <div className="bg-white rounded-xl shadow p-6 mb-8 flex items-center gap-8">
       <div>
         <div className="text-gray-500 text-sm">Total Applied Jobs</div>
