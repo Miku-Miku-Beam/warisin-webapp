@@ -1,22 +1,24 @@
-const HeroSection = () => (
-  <section className="flex flex-col md:flex-row items-center gap-8 py-12 px-4 bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl shadow mb-8">
-    <div className="flex-1">
-      <h1 className="text-3xl md:text-5xl font-bold text-yellow-800 mb-4">
-        Regenerasi Warisan Budaya Indonesia
-      </h1>
-      <p className="text-lg md:text-xl text-gray-700 mb-6">
-        Platform digital yang menghubungkan maestro pengrajin tradisional dengan generasi muda penerus budaya.<br />
-        <span className="font-semibold text-yellow-700">Bukan sekadar jobseeker, tapi jembatan regenerasi <span className="underline">Cultural Heritage</span>.</span>
-      </p>
-      <a href="/register" className="inline-block bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-3 px-8 rounded-lg shadow transition">
-        Gabung Sekarang
-      </a>
-    </div>
-    <img
-      src="/assets/hero-illustration.png"
-      alt="Ilustrasi Budaya"
-      className="w-64 md:w-80 rounded-xl shadow-lg"
-    />
-  </section>
-);
-export default HeroSection;
+import Image from "next/image";
+import Navbar from "@/app/components/Navbar";
+export default function HeroSection() {
+  return (
+    <section className="relative w-full flex items-center justify-center overflow-hidden min-h-[70vh] sm:min-h-screen">
+      {/* Background Image */}
+      <Image
+        src="/Heroes-section.png"
+        alt="Cultural Heritage"
+        fill
+        className="object-cover object-center z-0"
+        priority
+        sizes="100vw"
+      />
+      {/* Overlay Gradient */}
+      {/* Navbar at the very top, above content */}
+      <div className="absolute top-6 left-1/2 -translate-x-1/2 z-30 w-[95vw] max-w-7xl">
+        <Navbar />
+      </div>
+      {/* Content */}
+      
+    </section>
+  );
+}

@@ -1,4 +1,4 @@
-import { Navbar } from '@/lib/components';
+import Navbar from "@/app/components/Navbar";
 import ArtisanUnggulan from './components/ArtisanUnggulan';
 import CaraKerja from './components/CaraKerja';
 import CTASection from './components/CTASection';
@@ -8,16 +8,15 @@ import Footer from './components/Footer';
 import HeroSection from './components/HeroSection';
 import TargetPengguna from './components/TargetPengguna';
 import Testimoni from './components/Testimoni';
-import VisiMisi from './components/VisiMisi';
+
 
 export default function HomePage() {
   <ArtisanUnggulan />
   return (
     <main>
-      <Navbar />
-      <div className="container mx-auto px-4 py-8">
+      <div className="w-full flex flex-col items-center">
+      <div>
         <HeroSection />
-        <VisiMisi />
         <TargetPengguna />
         <FiturUtama />
         <CaraKerja />
@@ -25,6 +24,7 @@ export default function HomePage() {
         <FAQ />
         <CTASection />
         <Footer />
+      </div>
       </div>
     </main>
   );
